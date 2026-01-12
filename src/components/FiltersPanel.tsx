@@ -1,0 +1,189 @@
+"use client";
+
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
+import { Checkbox } from "./ui/checkbox";
+import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
+import { Slider } from "./ui/slider";
+import { Label } from "./ui/label";
+import { Button } from "./ui/button";
+import { Separator } from "./ui/separator";
+import { uuid } from "@tanstack/react-form";
+import { Category } from "@/domains/categories/type";
+import { useGoods } from "@/domains/goods";
+import { useCategories } from "@/domains/categories";
+
+const SIZES = ["XXS", "XS", "S", "M", "L", "XL", "XXL"];
+
+interface FiltersPanelProps {
+  maxAvailablePrice: number;
+}
+
+export default function FiltersPanel({ maxAvailablePrice }: FiltersPanelProps) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const { data: categories } = useCategories();
+
+  const updateQuery = useCallback(
+    (name: string, value: string | null) => {
+      const params = new URLSearchParams(searchParams.toString());
+      if (value) {
+        params.set(name, value);
+      } else {
+        params.delete(name);
+      }
+      router.push(`${pathname}?${params.toString()}`, { scroll: false });
+    },
+    [router, pathname, searchParams]
+  );
+
+  const handleSizeChange = (checked: boolean, sizeValue: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    const currentSizes = params.getAll("size");
+
+    if (checked) {
+      params.append("size", sizeValue);
+    } else {
+      const newSizes = currentSizes.filter((s) => s !== sizeValue);
+      params.delete("size");
+      newSizes.forEach((s) => params.append("size", s));
+    }
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+  };
+
+  const handlePriceChange = (values: number[]) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("min_price", values[0].toString());
+    params.set("max_price", values[1].toString());
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+  };
+
+  return (
+    <aside className="w-full md:max-w-50 xl:max-w-70 space-y-8 pr-4">
+      <div className="space-y-3">
+        <li
+          key={uuid()}
+          className="cursor-pointer hover:text-neutral-darkest-20 transition"
+          onClick={() => updateQuery("category_id", "")}
+        >
+          Усі
+        </li>
+        <ul className="space-y-3">
+          {categories?.map((cat: Category) => (
+            <li
+              key={uuid()}
+              className="cursor-pointer hover:text-neutral-darkest-20 transition"
+              onClick={() => updateQuery("category_id", cat.id)}
+            >
+              {cat.name}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <Separator />
+
+      <div className="space-y-4">
+        <div className="flex justify-between items-center">
+          <p className="font-semibold">Розмір</p>
+          <Button onClick={() => updateQuery("size", null)} variant="link">
+            Очистити
+          </Button>
+        </div>
+        <div className="flex flex-col gap-4">
+          {SIZES.map((size) => (
+            <div key={size} className="flex items-center gap-2">
+              <Checkbox
+                id={size}
+                checked={searchParams.getAll("size").includes(size)}
+                onCheckedChange={(checked) => handleSizeChange(!!checked, size)}
+              />
+              <Label
+                htmlFor={size}
+                className="text-sm font-normal cursor-pointer"
+              >
+                {size}
+              </Label>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <Separator />
+
+      <div className="space-y-6">
+        <div className="flex justify-between items-center">
+          <p className="font-semibold">Ціна</p>
+          <Button
+            onClick={() => {
+              updateQuery("min_price", null);
+              updateQuery("max_price", null);
+            }}
+            variant="link"
+          >
+            Очистити
+          </Button>
+        </div>
+        <Slider
+          defaultValue={[
+            Number(searchParams.get("min_price")) || 0,
+            Number(searchParams.get("max_price")) || maxAvailablePrice,
+          ]}
+          max={maxAvailablePrice}
+          step={10}
+          onValueCommit={handlePriceChange}
+          className="mt-6"
+        />
+        <div className="flex justify-between text-sm">
+          <span>0</span>
+          <span>{maxAvailablePrice}</span>
+        </div>
+      </div>
+
+      <Separator />
+
+      <div className="space-y-4">
+        <div className="flex justify-between items-center">
+          <p className="font-semibold">Стать</p>
+          <Button variant="link">Очистити</Button>
+        </div>
+        <RadioGroup
+          defaultValue={searchParams.get("gender") || "all"}
+          onValueChange={(val) =>
+            updateQuery("gender", val === "all" ? null : val)
+          }
+          className="gap-4"
+        >
+          <div className="flex items-center gap-2">
+            <RadioGroupItem value="all" id="all" />
+            <Label htmlFor="all" className="font-normal cursor-pointer">
+              Всі
+            </Label>
+          </div>
+          <div className="flex items-center gap-2">
+            <RadioGroupItem value="women" id="women" />
+            <Label htmlFor="women" className="font-normal cursor-pointer">
+              Жіночий
+            </Label>
+          </div>
+          <div className="flex items-center gap-2">
+            <RadioGroupItem value="man" id="men" />
+            <Label htmlFor="men" className="font-normal cursor-pointer">
+              Чоловічий
+            </Label>
+          </div>
+          <div className="flex items-center gap-2">
+            <RadioGroupItem value="unisex" id="unisex" />
+            <Label htmlFor="unisex" className="font-normal cursor-pointer">
+              Унісекс
+            </Label>
+          </div>
+        </RadioGroup>
+      </div>
+
+      <Separator />
+    </aside>
+  );
+}

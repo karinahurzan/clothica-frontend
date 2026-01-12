@@ -13,6 +13,8 @@ const buttonVariants = cva(
           "bg-deco rounded-4xl text-scheme-1-text hover:bg-deco-dark focus:bg-deco-dark border border-transparent hover:border-deco-darker focus:border-deco-darker active:bg-deco-darkest active:text-white active:border-deco disabled:opacity-40",
         secondary:
           "bg-neutral-darkest-5 rounded-4xl text-scheme-1-text hover:bg-neutral-darkest-15 focus:bg-neutral-darkest-15 border border-transparent hover:border-neutral-darkest-50 focus:border-neutral-darkest-50 active:bg-neutral-darkest-50 active:text-white active:border-transparent disabled:opacity-40",
+        outline:
+          "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
         link: "text-neutral-darkest underline-offset-4 hover:underline focus:underline active:text-deco-dark active:decoration-deco-darker disabled:opacity-30",
       },
       size: {

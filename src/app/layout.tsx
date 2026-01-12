@@ -13,17 +13,17 @@ const nutinoSans = Nunito_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Clothica-shop",
+  title: "Clothica",
   description: "Clothica — це місце, де комфорт поєднується зі стилем.",
   openGraph: {
-    title: "Clothica-shop",
+    title: "Clothica",
     description: "Clothica — це місце, де комфорт поєднується зі стилем.",
     images: [
       {
-        url: "https://clothica-front.vercel.app/images/hero/hero-desktop.png",
+        url: "https://clothica-front.vercel.app/images/hero/hero-desktop@2x.jpg",
         width: 1200,
         height: 630,
-        alt: "Welcome to Clothica-shop",
+        alt: "Welcome to Clothica",
       },
     ],
     url: "https://clothica-front.vercel.app",
@@ -38,7 +38,7 @@ export default function RootLayout({
   return (
     <html lang="ua">
       <body
-        className={`${nutinoSans.variable} antialiased flex min-h-screen justify-center items-center flex-col bg-scheme-4-background font-sans text-scheme-4-text`}
+        className={`${nutinoSans.variable} antialiased mr-0! flex min-h-screen justify-center items-center flex-col bg-scheme-4-background font-sans text-scheme-4-text`}
       >
         <Providers>
           <Header />

@@ -105,7 +105,7 @@ export default function Login() {
             e.stopPropagation();
             form.handleSubmit();
           }}
-          className="space-y-6 w-full flex flex-col gap-6"
+          className="space-y-6 w-full flex flex-col"
         >
           <form.Field name="email">
             {(field) => (

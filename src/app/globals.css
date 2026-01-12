@@ -78,6 +78,7 @@
   --color-neutral-darkest-50: var(--opacity-neutral-darkest-50);
   --color-neutral-darkest-60: var(--opacity-neutral-darkest-60);
   --breakpoint-xs: 560px;
+  --breakpoint-xxs: 370px;
 }
 
 * {
@@ -115,3 +116,4 @@ button {
 main {
   flex: 1;
 }
+
