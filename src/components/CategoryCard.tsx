@@ -1,8 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
 import { categoryImages } from "@/constants/categoryImages";
-import { Category } from "@/domains/categories";
 import Placeholder from "./Placeholder";
+import { Category } from "@/domains/categories/type";
 
 interface Props {
   category: Category;

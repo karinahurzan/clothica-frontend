@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import ContainerLayout from "./ContainerLayout";
 import CategoryCard from "./CategoryCard";
 import { Button } from "./ui/button";
@@ -13,12 +13,17 @@ import { Category } from "@/domains/categories/type";
 const LOAD_MORE_AMOUNT = 3;
 
 export default function CategoriesList() {
-  const [visibleCount, setVisibleCount] = useState(4);
+  const [visibleCount, setVisibleCount] = useState(6);
   const [categories, setCategories] = useState<Category[]>([]);
 
   const { data, isLoading, isError } = useCategories();
 
-  if (data !== undefined) setCategories(data);
+  useEffect(() => {
+    if (data) {
+      const id = setTimeout(() => setCategories(data), 0);
+      return () => clearTimeout(id);
+    }
+  }, [data]);
 
   const visibleCategories = useMemo(
     () => categories.slice(0, visibleCount),

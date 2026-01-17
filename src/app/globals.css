@@ -93,14 +93,6 @@ body {
   min-height: 100vh;
 }
 
-a {
-  text-decoration: none;
-}
-
-li {
-  list-style: none;
-}
-
 button {
   cursor: pointer;
 }
@@ -117,3 +109,12 @@ main {
   flex: 1;
 }
 
+input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}

@@ -14,6 +14,8 @@ export interface Good {
   prevDescription: string;
   gender: string;
   characteristics: string[];
+  feedbacks_average: number;
+  feedbacks_count: number;
 }
 
 export interface GoodFilter {

@@ -11,7 +11,6 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        // 1. ДЕБАГ: Перевіряємо, чи прийшли дані з форми
         console.log("🔑 [NextAuth] Inputs:", credentials);
 
         if (!credentials?.email || !credentials?.password) {
@@ -20,45 +19,27 @@ export const authOptions: NextAuthOptions = {
         }
 
         try {
-          // 2. ДЕБАГ: Робимо запит на бекенд
-          // УВАГА: FastAPI часто вимагає 'username' замість 'email' у тілі запиту,
-          // і часто вимагає Form Data (application/x-www-form-urlencoded), а не JSON.
-
           console.log("🚀 [NextAuth] Sending request to backend...");
 
-          // ВАРІАНТ А: Якщо ваш бекенд приймає JSON:
           const res = await api.post("/auth/login", {
-            email: credentials.email, // Перевірте, чи бекенд чекає "email" чи "username"
+            email: credentials.email,
             password: credentials.password,
           });
-
-          // ВАРІАНТ Б: Якщо ваш бекенд стандартний FastAPI (OAuth2PasswordRequestForm):
-          /*
-          const formData = new URLSearchParams();
-          formData.append('username', credentials.email); // Мапимо email на username
-          formData.append('password', credentials.password);
-          
-          const res = await api.post("/auth/login", formData, {
-             headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-          });
-          */
 
           const user = res.data;
           console.log("✅ [NextAuth] Backend response:", user);
 
-          // 3. Перевіряємо, чи є токен/юзер
           if (user) {
-            return user; // Успіх!
+            return user;
           }
 
-          return null; // Якщо user пустий -> 401
+          return null;
         } catch (error: any) {
-          // 4. ДЕБАГ: Якщо бекенд повернув помилку
           console.error(
             "🔥 [NextAuth] Backend Error:",
             error.response?.data || error.message
           );
-          return null; // Це викличе 401 у браузері
+          return null;
         }
       },
     }),
