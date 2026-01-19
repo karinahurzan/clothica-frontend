@@ -27,6 +27,8 @@ export default function Header() {
 
   const cartItems = userCartStore((state) => state.items) || [];
 
+  console.log(cartItems);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsMounted(true);
@@ -48,7 +50,7 @@ export default function Header() {
 
   const cartCount = cartItems.reduce(
     (total, item) => total + (item.quantity || 1),
-    0
+    0,
   );
 
   const pathname = usePathname();
@@ -73,7 +75,7 @@ export default function Header() {
     return cn(
       pathname === href
         ? "border-b-2 border-scheme-1-border"
-        : "border-b-2 border-transparent"
+        : "border-b-2 border-transparent",
     );
   };
 
@@ -121,7 +123,7 @@ export default function Header() {
                 href={"/profile"}
                 className={cn(
                   buttonVariants({ variant: "secondary" }),
-                  "rounded-full py-1 px-2.5 hidden md:flex items-center justify-center"
+                  "rounded-full py-1 px-2.5 hidden md:flex items-center justify-center",
                 )}
               >
                 Кабінет
@@ -140,7 +142,7 @@ export default function Header() {
                 href={"/login"}
                 className={cn(
                   buttonVariants({ variant: "secondary" }),
-                  "rounded-full py-1 px-2.5 hidden md:flex items-center justify-center"
+                  "rounded-full py-1 px-2.5 hidden md:flex items-center justify-center",
                 )}
               >
                 Вхід
@@ -149,7 +151,7 @@ export default function Header() {
                 href={"/sign-up"}
                 className={cn(
                   buttonVariants({ variant: "default" }),
-                  "rounded-full py-1 px-2.5 hidden md:flex items-center justify-center"
+                  "rounded-full py-1 px-2.5 hidden md:flex items-center justify-center",
                 )}
               >
                 Реєстрація
@@ -209,7 +211,7 @@ export default function Header() {
                   href={"/profile"}
                   className={cn(
                     buttonVariants({ variant: "secondary" }),
-                    "w-full rounded-full py-6 text-lg border-none shadow-none"
+                    "w-full rounded-full py-6 text-lg border-none shadow-none",
                   )}
                 >
                   Кабінет
@@ -229,7 +231,7 @@ export default function Header() {
                   onClick={closeMenu}
                   className={cn(
                     buttonVariants({ variant: "secondary" }),
-                    "w-full rounded-full py-6 text-lg border-none shadow-none"
+                    "w-full rounded-full py-6 text-lg border-none shadow-none",
                   )}
                 >
                   Вхід
@@ -239,7 +241,7 @@ export default function Header() {
                   onClick={closeMenu}
                   className={cn(
                     buttonVariants({ variant: "secondary" }),
-                    "w-full rounded-full py-6 text-lg border-none text-black"
+                    "w-full rounded-full py-6 text-lg border-none text-black",
                   )}
                 >
                   Реєстрація

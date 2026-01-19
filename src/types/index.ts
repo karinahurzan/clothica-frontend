@@ -14,7 +14,8 @@ export interface Product {
   prevDescription: string;
   gender: string;
   characteristics: string[];
-  feedbacks: string[];
+  feedbacks_average: number;
+  feedbacks_count: number;
 }
 
 export interface User {

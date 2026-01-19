@@ -1,5 +1,5 @@
 import api from "@/lib/axios";
-import { GoodFilter, GoodResponse, GoodsResponse } from "./type";
+import { Good, GoodFilter, GoodResponse, GoodsResponse } from "./type";
 import axios from "axios";
 
 export async function getGoods({
@@ -35,13 +35,9 @@ export async function getGoods({
   }
 }
 
-export async function getGoodById({
-  id,
-}: {
-  id: string;
-}): Promise<GoodResponse> {
+export async function getGoodById({ id }: { id: string }): Promise<Good> {
   try {
-    const { data } = await api.get<GoodResponse>(`/goods/${id}`);
+    const { data } = await api.get<Good>(`/goods/${id}`);
 
     return data;
   } catch (error) {

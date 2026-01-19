@@ -2,10 +2,10 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getFeedbacks, createFeedback, getLatestFeedbacks } from "./service";
 import { FeedbackCreate } from "./type";
 
-export const useFeedbacks = (productId: string) => {
+export const useFeedbacks = (productId?: string) => {
   return useQuery({
     queryKey: ["feedbacks", productId],
-    queryFn: () => getFeedbacks(productId),
+    queryFn: () => getFeedbacks(productId!),
     enabled: !!productId,
   });
 };

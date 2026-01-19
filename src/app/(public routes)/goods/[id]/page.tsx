@@ -16,7 +16,6 @@ import {
 } from "@/components/ui/breadcrumb";
 import { useCategory } from "@/domains/categories";
 import { Separator } from "@/components/ui/separator";
-import { useMemo } from "react";
 import { formatReviews } from "@/utils/formatFeedback";
 import { RatingStars } from "@/components/RatingStars";
 import {
@@ -32,6 +31,7 @@ import { Input } from "@/components/ui/input";
 import FeedbacksCarousel from "@/components/FeedbacksCarousel";
 import { Loader } from "lucide-react";
 import { useFeedbacks } from "@/domains/feedbacks";
+import { userCartStore } from "@/store/cartStore";
 
 export default function Good() {
   const params = useParams();
@@ -41,19 +41,18 @@ export default function Good() {
 
   const { data: category } = useCategory(good?.category_id);
 
-  const hasImage = good?.image;
+  const handleAddToCart = () => {
+    if (good) {
+      const addItem = userCartStore.getState().addItem;
+      addItem(good);
+    }
+  };
 
   const { data: feedbacks, isLoading: isFeedbacksLoading } = useFeedbacks(
-    good?.id || ""
+    good?.id
   );
 
-  const middleRating = useMemo(() => {
-    if (!feedbacks || feedbacks.length === 0) return 0;
-
-    const sum = feedbacks.reduce((acc, f) => acc + f.rate, 0);
-
-    return sum / feedbacks.length;
-  }, [feedbacks]);
+  const hasImage = good?.image;
 
   return (
     <>
@@ -61,7 +60,9 @@ export default function Good() {
         <div className="flex items-center justify-center mt-10">
           <Loader className="w-10 h-10 animate-spin" />
         </div>
-      ) : (
+      ) : null}
+
+      {!isFetching && (
         <>
           <ContainerLayout className="md:flex md:flex-row md:justify-between gap-8">
             <div className="max-h-90 md:max-h-90 xl:max-w-160 xl:max-h-175 max-w-full md:w-1/2 mb-4 hover:shadow-[0_4px_4px_0_rgba(0,0,0,0.25)] transition-all duration-200 overflow-hidden rounded-2xl bg-neutral-darkest-5">
@@ -111,8 +112,8 @@ export default function Good() {
                   orientation="vertical"
                 />
                 <div className="flex flex-row items-center gap-2">
-                  <RatingStars rating={middleRating} />
-                  <span>({middleRating.toFixed(1)})</span>
+                  <RatingStars rating={Number(good?.feedbacks_average)} />
+                  <span>({good?.feedbacks_average.toFixed(1)})</span>
                   <span className="text-lg leading-none">•</span>
                   <span>{formatReviews(feedbacks?.length || 0)}</span>
                 </div>
@@ -143,7 +144,11 @@ export default function Good() {
                 </Select>
 
                 <div className="flex flex-row gap-4 mt-6 mb-4 max-h-9">
-                  <Button variant="default" className="w-4/5">
+                  <Button
+                    onClick={handleAddToCart}
+                    variant="default"
+                    className="w-4/5"
+                  >
                     Додати в кошик
                   </Button>
 
@@ -181,7 +186,7 @@ export default function Good() {
             <FeedbacksCarousel
               productId={good?.id}
               feedbacks={feedbacks}
-              isLoading={isFeedbacksLoading}
+              isLoading={isFetching || isFeedbacksLoading}
             ></FeedbacksCarousel>
           </ContainerLayout>
         </>
