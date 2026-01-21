@@ -18,51 +18,35 @@ import { useCategory } from "@/domains/categories";
 import { Separator } from "@/components/ui/separator";
 import { formatReviews } from "@/utils/formatFeedback";
 import { RatingStars } from "@/components/RatingStars";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import FeedbacksCarousel from "@/components/FeedbacksCarousel";
 import { Loader } from "lucide-react";
 import { useFeedbacks } from "@/domains/feedbacks";
-import { userCartStore } from "@/store/cartStore";
+import HandleAddToCart from "./components/HandleAddToCart";
 
 export default function Good() {
-  const params = useParams();
-  const id = params.id as string;
+  const { id } = useParams() as { id: string };
 
-  const { data: good, isFetching } = useGood({ id });
+  const { data: good, isLoading } = useGood(id);
 
   const { data: category } = useCategory(good?.category_id);
 
-  const handleAddToCart = () => {
-    if (good) {
-      const addItem = userCartStore.getState().addItem;
-      addItem(good);
-    }
-  };
+  const { data: feedbacks, isLoading: isFeedbacksLoading } = useFeedbacks({
+    productId: id,
+  });
 
-  const { data: feedbacks, isLoading: isFeedbacksLoading } = useFeedbacks(
-    good?.id
-  );
+  console.log(good);
 
   const hasImage = good?.image;
 
   return (
     <>
-      {isFetching ? (
+      {isLoading ? (
         <div className="flex items-center justify-center mt-10">
           <Loader className="w-10 h-10 animate-spin" />
         </div>
       ) : null}
 
-      {!isFetching && (
+      {!isLoading && (
         <>
           <ContainerLayout className="md:flex md:flex-row md:justify-between gap-8">
             <div className="max-h-90 md:max-h-90 xl:max-w-160 xl:max-h-175 max-w-full md:w-1/2 mb-4 hover:shadow-[0_4px_4px_0_rgba(0,0,0,0.25)] transition-all duration-200 overflow-hidden rounded-2xl bg-neutral-darkest-5">
@@ -121,7 +105,7 @@ export default function Good() {
 
               <p className="mb-6">{good?.prevDescription}</p>
 
-              <div className="mb-8">
+              {/* <div className="mb-8">
                 <span className="block mb-2">Розмір</span>
 
                 <Select>
@@ -152,7 +136,12 @@ export default function Good() {
                     Додати в кошик
                   </Button>
 
-                  <Input type="number" min={1} className="w-1/5" />
+                  <Input
+                    type="number"
+                    value={quantity}
+                    onChange={handleQuantityChange}
+                    className="w-1/5"
+                  />
                 </div>
 
                 <Button variant="secondary" className="w-full">
@@ -162,7 +151,9 @@ export default function Good() {
                 <span className="text-xs text-center block mt-4">
                   Безкоштовна доставка для замовлень від 1000 грн
                 </span>
-              </div>
+              </div> */}
+
+              <HandleAddToCart good={good} />
 
               <div>
                 <span className="border-b border-scheme-1-accent pb-2 mb-6 inline-block">
@@ -182,13 +173,11 @@ export default function Good() {
             </div>
           </ContainerLayout>
 
-          <ContainerLayout>
-            <FeedbacksCarousel
-              productId={good?.id}
-              feedbacks={feedbacks}
-              isLoading={isFetching || isFeedbacksLoading}
-            ></FeedbacksCarousel>
-          </ContainerLayout>
+          <FeedbacksCarousel
+            productId={good?.id}
+            feedbacks={feedbacks}
+            isLoading={isLoading || isFeedbacksLoading}
+          ></FeedbacksCarousel>
         </>
       )}
     </>

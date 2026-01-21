@@ -33,8 +33,6 @@ export default function GoodsListClient({
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useGoods({ gender, category_id, size, minPrice, maxPrice });
 
-  console.log(data);
-
   const allGoods =
     data?.pages?.flatMap((page: GoodsResponse) => page.items) || [];
 

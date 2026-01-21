@@ -9,7 +9,6 @@ export const getFeedbacks = async (productId: string): Promise<Feedback[]> => {
 export const getLatestFeedbacks = async (): Promise<Feedback[]> => {
   try {
     const { data } = await api.get<Feedback[]>("/feedbacks/latest");
-    console.log("Latest feedbacks from server:", data);
     return data;
   } catch (err) {
     console.error("Failed to fetch latest feedbacks:", err);
@@ -19,7 +18,7 @@ export const getLatestFeedbacks = async (): Promise<Feedback[]> => {
 
 export const createFeedback = async (
   feedback: FeedbackCreate,
-  token: string
+  token: string,
 ): Promise<Feedback> => {
   const { data } = await api.post<Feedback>("/feedbacks", feedback, {
     headers: {

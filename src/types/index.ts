@@ -16,6 +16,7 @@ export interface Product {
   characteristics: string[];
   feedbacks_average: number;
   feedbacks_count: number;
+  quantity: number;
 }
 
 export interface User {

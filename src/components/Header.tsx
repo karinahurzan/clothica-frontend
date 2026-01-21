@@ -3,8 +3,6 @@
 import Link from "next/link";
 import { Button, buttonVariants } from "./ui/button";
 import { RxHamburgerMenu, RxCross1 } from "react-icons/rx";
-import { userCartStore } from "@/store/cartStore";
-import { MdOutlineShoppingCart } from "react-icons/md";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 
@@ -17,25 +15,13 @@ import {
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { logout } from "@/domains/auth";
+import { CartModal } from "./CartModal";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
 
   const session = useSession();
   const { token } = session?.data?.user || {};
-
-  const cartItems = userCartStore((state) => state.items) || [];
-
-  console.log(cartItems);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsMounted(true);
-    }, 0);
-
-    return () => clearTimeout(timer);
-  }, []);
 
   useEffect(() => {
     if (open) {
@@ -47,11 +33,6 @@ export default function Header() {
       document.body.style.overflow = "unset";
     };
   }, [open]);
-
-  const cartCount = cartItems.reduce(
-    (total, item) => total + (item.quantity || 1),
-    0,
-  );
 
   const pathname = usePathname();
 
@@ -167,18 +148,7 @@ export default function Header() {
             {open ? <RxCross1 /> : <RxHamburgerMenu />}
           </Button>
 
-          <Link
-            href="/basket"
-            className="relative h-9 w-9 rounded-full border-none bg-neutral-darkest text-white flex justify-center items-center cursor-pointer"
-          >
-            <MdOutlineShoppingCart className="rounded-25 h-6 w-6 flex items-center justify-center bg-neutral-darkest-5" />
-
-            {isMounted && cartCount > 0 && (
-              <span className="absolute -top-2 -right-2 flex items-center justify-center w-5 h-5 rounded-full bg-red text-xs font-semibold text-white">
-                {cartCount}
-              </span>
-            )}
-          </Link>
+          <CartModal />
         </div>
       </div>
 
