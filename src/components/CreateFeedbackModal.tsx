@@ -68,14 +68,19 @@ export function CreateFeedbackModal({ productId }: { productId: string }) {
           setOpen(false);
           reset();
         },
-      }
+      },
     );
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="secondary">Залишити відгук</Button>
+        <Button
+          className="whitespace-normal h-full text-center max-w-30 xxs:max-w-full"
+          variant="secondary"
+        >
+          Залишити відгук
+        </Button>
       </DialogTrigger>
       <DialogContent className="w-full xl:min-w-3xl rounded-2xl py-10 px-5 md:px-16 xl:py-16">
         <DialogHeader>
@@ -117,7 +122,7 @@ export function CreateFeedbackModal({ productId }: { productId: string }) {
                 key={star}
                 className={cn(
                   "w-6 h-6 cursor-pointer transition-colors",
-                  star <= rating ? "fill-black text-black" : "text-gray-400"
+                  star <= rating ? "fill-black text-black" : "text-gray-400",
                 )}
                 onClick={() => setValue("rate", star)}
               />

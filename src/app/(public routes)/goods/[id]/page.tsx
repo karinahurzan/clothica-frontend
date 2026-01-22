@@ -49,15 +49,15 @@ export default function Good() {
       {!isLoading && (
         <>
           <ContainerLayout className="md:flex md:flex-row md:justify-between gap-8">
-            <div className="max-h-90 md:max-h-90 xl:max-w-160 xl:max-h-175 max-w-full md:w-1/2 mb-4 hover:shadow-[0_4px_4px_0_rgba(0,0,0,0.25)] transition-all duration-200 overflow-hidden rounded-2xl bg-neutral-darkest-5">
+            <div className="relative w-full h-auto max-h-90 md:max-w-84 md:max-h-90 xl:max-w-160 xl:max-h-175 mb-4 hover:shadow-[0_4px_4px_0_rgba(0,0,0,0.25)] transition-all duration-200 overflow-hidden rounded-2xl bg-neutral-darkest-5">
+              <div className="relative w-full h-auto min-h-90 md:min-h-61 xl:min-h-94 mb-4 hover:shadow-lg transition-all duration-200 overflow-hidden rounded-2xl bg-neutral-darkest-5"></div>
               {hasImage ? (
                 <Image
                   src={good.image}
                   alt={good.name}
-                  className="object-cover min-h-90 md:min-w-84 md:min-h-90 xl:min-w-160 xl:min-h-175"
-                  width={335}
-                  height={357}
-                  style={{ width: "100%", height: "auto" }}
+                  className="object-cover"
+                  fill
+                  priority={false}
                 />
               ) : (
                 <Placeholder className="min-h-90 md:min-w-84 md:min-h-90 xl:min-w-160 xl:min-h-175" />
@@ -99,59 +99,11 @@ export default function Good() {
                   <RatingStars rating={Number(good?.feedbacks_average)} />
                   <span>({good?.feedbacks_average.toFixed(1)})</span>
                   <span className="text-lg leading-none">•</span>
-                  <span>{formatReviews(feedbacks?.length || 0)}</span>
+                  <span>{formatReviews(good?.feedbacks_count || 0)}</span>
                 </div>
               </div>
 
               <p className="mb-6">{good?.prevDescription}</p>
-
-              {/* <div className="mb-8">
-                <span className="block mb-2">Розмір</span>
-
-                <Select>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Виберіть розмір" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      {good?.size?.map((size) => (
-                        <SelectItem
-                          key={uuidv4()}
-                          className="capitalize"
-                          value={size}
-                        >
-                          {size}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-
-                <div className="flex flex-row gap-4 mt-6 mb-4 max-h-9">
-                  <Button
-                    onClick={handleAddToCart}
-                    variant="default"
-                    className="w-4/5"
-                  >
-                    Додати в кошик
-                  </Button>
-
-                  <Input
-                    type="number"
-                    value={quantity}
-                    onChange={handleQuantityChange}
-                    className="w-1/5"
-                  />
-                </div>
-
-                <Button variant="secondary" className="w-full">
-                  Купити зараз
-                </Button>
-
-                <span className="text-xs text-center block mt-4">
-                  Безкоштовна доставка для замовлень від 1000 грн
-                </span>
-              </div> */}
 
               <HandleAddToCart good={good} />
 

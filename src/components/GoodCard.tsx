@@ -14,14 +14,13 @@ interface Props {
 export default function GoodCard({ good }: Props) {
   return (
     <div className="flex flex-col group min-h-132 max-w-66 md:max-w-50 md:min-h-104 xl:max-w-78 xl:min-h-130">
-      <div className="relative mb-4 hover:shadow-lg transition-all duration-200 overflow-hidden rounded-2xl bg-neutral-darkest-5">
+      <div className="relative w-full h-auto min-h-90 md:min-h-61 xl:min-h-94 mb-4 hover:shadow-lg transition-all duration-200 overflow-hidden rounded-2xl bg-neutral-darkest-5">
         {good.image ? (
           <Image
             src={good.image}
             alt={good.name}
-            className="object-cover w-full h-auto min-h-90 md:min-h-61 xl:min-h-94"
-            width={304}
-            height={375}
+            className="object-cover"
+            fill
             priority={false}
           />
         ) : (
@@ -59,7 +58,7 @@ export default function GoodCard({ good }: Props) {
         href={`/goods/${good.id}`}
         className={cn(
           buttonVariants({ variant: "secondary" }),
-          "rounded-full py-2 xl:mt-4 flex items-center justify-center transition-colors"
+          "rounded-full py-2 xl:mt-4 flex items-center justify-center transition-colors",
         )}
       >
         Детальніше

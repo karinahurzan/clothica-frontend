@@ -3,16 +3,10 @@ import { Price } from "@/types";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-type BasketSelectors = {
-  getTotalCount: () => number;
-  getTotalPrice: () => number;
-};
-// 1. Unified the Good type to include the unique key
 export type StoreGood = {
-  key: string; // Generated ID (id + size + color)
+  key: string;
   good: Good;
   quantity: number;
-  price: Price;
 };
 
 type BasketState = {
@@ -29,7 +23,6 @@ type BasketState = {
 export const useBasket = create<BasketState>()(
   persist(
     (set, get) => {
-      // Helper to generate unique keys for items with variations
       const buildGoodKey = (g: Good) =>
         `${g.id}_${g.size || "nosize"}_${"nocolor"}`;
 
@@ -40,10 +33,9 @@ export const useBasket = create<BasketState>()(
           return get().goods.reduce((sum, item) => sum + item.quantity, 0);
         },
 
-        // Бонус: загальна вартість кошика
         getTotalPrice: () => {
           return get().goods.reduce(
-            (sum, item) => sum + item.price.value * item.quantity,
+            (sum, item) => sum + item.good.price.value * item.quantity,
             0,
           );
         },
@@ -66,7 +58,7 @@ export const useBasket = create<BasketState>()(
                   key,
                   good,
                   quantity,
-                  price: good.price, // Assuming price exists on Good type
+                  price: good.price,
                 },
               ],
             };
@@ -97,7 +89,7 @@ export const useBasket = create<BasketState>()(
       };
     },
     {
-      name: "basket-storage", // Key for LocalStorage
+      name: "basket-storage",
     },
   ),
 );

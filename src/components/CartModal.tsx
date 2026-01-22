@@ -16,19 +16,28 @@ import { X } from "lucide-react";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import CartItem from "./CartItem";
 import { useBasket } from "@/store/cartStore";
+import { useEffect, useState } from "react";
 
 export function CartModal() {
-  const { goods: items, getTotalCount } = useBasket((state) => state);
+  const {
+    goods: items,
+    getTotalCount,
+    getTotalPrice,
+  } = useBasket((state) => state);
 
   console.log(items);
 
-  // if (!isHydrated) {
-  //   return (
-  //     <Button className="relative p-0 h-9 w-9 rounded-full bg-neutral-darkest text-white">
-  //       <MdOutlineShoppingCart className="h-8 w-8" />
-  //     </Button>
-  //   );
-  // }
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setIsMounted(true);
+    }, 0);
+
+    return () => clearInterval(id);
+  }, []);
+
+  const deliveryCost = 150;
 
   return (
     <Drawer direction="right">
@@ -36,14 +45,14 @@ export function CartModal() {
         <Button className="relative p-0 gap-0 hover:bg-neutral-darkest active:bg-neutral-darkest focus:bg-neutral-darkest h-9 w-9 rounded-full border-none bg-neutral-darkest text-white flex justify-center items-center cursor-pointer">
           <MdOutlineShoppingCart className="rounded-25 h-8 w-8 flex items-center justify-center bg-neutral-darkest-5" />
 
-          {getTotalCount() > 0 && (
+          {isMounted && getTotalCount() > 0 && (
             <span className="absolute -top-2 -right-2 flex items-center justify-center w-5 h-5 rounded-full bg-red text-xs font-semibold text-white">
               {getTotalCount()}
             </span>
           )}
         </Button>
       </DrawerTrigger>
-      <DrawerContent className="pt-10 pr-16 pb-16 pl-8">
+      <DrawerContent className="pt-10 pr-5 md:pr-16 pb-10 md:pb-16 pl-3 md:pl-8">
         <DrawerHeader className="flex items-end p-0 gap-6!">
           <DrawerClose asChild>
             <X className="cursor-pointer" />
@@ -61,13 +70,31 @@ export function CartModal() {
           </div>
         ) : (
           <>
-            <ul className="no-scrollbar overflow-y-auto py-6">
+            <ul className="no-scrollbar overflow-y-auto py-6 flex flex-col gap-4">
               {items.map((product) => (
-                <li key={uuidv4()}>{/* <CartItem product={product} /> */}</li>
+                <li key={uuidv4()}>{<CartItem product={product} />}</li>
               ))}
             </ul>
-            <DrawerFooter>
-              <Button>Submit</Button>
+            <DrawerFooter className="border-t border-scheme-1-border">
+              <div className="flex flex-row justify-between gap-2">
+                <span>Проміжний підсумок</span>
+                <span>{getTotalPrice()} грн</span>
+              </div>
+              <div className="flex flex-row justify-between gap-2 mb-3">
+                <span>Доставка</span>
+                <span>{deliveryCost} грн</span>
+              </div>
+              <div className="flex flex-row justify-between gap-2 font-semibold mb-9">
+                <span>Всього</span>
+                <span>{getTotalPrice() + deliveryCost} грн</span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 justify-between gap-2">
+                <DrawerClose asChild>
+                  <Button variant="secondary">Продовжити покупки</Button>
+                </DrawerClose>
+
+                <Button variant="default">Оформити замовлення</Button>
+              </div>
             </DrawerFooter>
           </>
         )}
