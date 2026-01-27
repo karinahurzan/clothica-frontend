@@ -34,7 +34,6 @@ export default function Good() {
     productId: id,
   });
 
-  console.log(good);
 
   const hasImage = good?.image;
 

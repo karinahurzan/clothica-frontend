@@ -31,7 +31,7 @@ export function useGoods({
 export function useGood(id: string) {
   return useQuery({
     queryKey: ["goods", id],
-    queryFn: () => getGoodById({ id }),
+    queryFn: () => getGoodById(id),
     enabled: !!id,
   });
 }

@@ -17,15 +17,18 @@ import { MdOutlineShoppingCart } from "react-icons/md";
 import CartItem from "./CartItem";
 import { useBasket } from "@/store/cartStore";
 import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import { toast } from "sonner";
 
 export function CartModal() {
+  const { data: session, status } = useSession();
+  const token = session?.user?.token;
+
   const {
     goods: items,
     getTotalCount,
     getTotalPrice,
   } = useBasket((state) => state);
-
-  console.log(items);
 
   const [isMounted, setIsMounted] = useState(false);
 
@@ -38,6 +41,16 @@ export function CartModal() {
   }, []);
 
   const deliveryCost = 150;
+
+  const creteAnOrder = async () => {
+    if (status !== "authenticated" || !token) {
+      toast.error("Операція не дозволена", {
+        description:
+          "Ви повинні бути зареєстровані для того, щоб оформити замовлення",
+      });
+      return;
+    }
+  };
 
   return (
     <Drawer direction="right">
@@ -93,7 +106,9 @@ export function CartModal() {
                   <Button variant="secondary">Продовжити покупки</Button>
                 </DrawerClose>
 
-                <Button variant="default">Оформити замовлення</Button>
+                <Button onClick={creteAnOrder} variant="default">
+                  Оформити замовлення
+                </Button>
               </div>
             </DrawerFooter>
           </>

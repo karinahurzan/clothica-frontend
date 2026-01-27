@@ -1,6 +1,6 @@
 import api from "@/lib/axios";
-import { Good, GoodFilter, GoodResponse, GoodsResponse } from "./type";
-import axios from "axios";
+import { Good, GoodFilter, GoodsResponse } from "./type";
+import { handleAxiosError } from "@/lib/handleAxiosError";
 
 export async function getGoods({
   gender,
@@ -26,26 +26,15 @@ export async function getGoods({
 
     return data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      console.error("Axios помилка:", error.response?.status, error.message);
-    } else {
-      console.error("Невідома помилка:", error);
-    }
-    throw new Error("Не вдалося завантажити список товарів");
+    handleAxiosError(error, "Не вдалося завантажити список товарів");
   }
 }
 
-export async function getGoodById({ id }: { id: string }): Promise<Good> {
+export async function getGoodById(id: string): Promise<Good> {
   try {
     const { data } = await api.get<Good>(`/goods/${id}`);
-
     return data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      console.error("Axios помилка:", error.response?.status, error.message);
-    } else {
-      console.error("Невідома помилка:", error);
-    }
-    throw new Error("Не вдалося завантажити товар");
+    handleAxiosError(error, "Не вдалося завантажити товар");
   }
 }

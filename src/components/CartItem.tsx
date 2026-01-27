@@ -13,8 +13,6 @@ export interface CartItemProps {
 }
 
 export default function CartItem({ product }: CartItemProps) {
-  console.log(product);
-
   const [quantity, setQuantity] = useState<number | undefined | "">(
     product?.quantity,
   );

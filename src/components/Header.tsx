@@ -16,12 +16,23 @@ import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { logout } from "@/domains/auth";
 import { CartModal } from "./CartModal";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
 
-  const session = useSession();
-  const { token } = session?.data?.user || {};
+  const { data: session, status } = useSession();
+  const token = session?.user?.token;
 
   useEffect(() => {
     if (open) {
@@ -63,9 +74,12 @@ export default function Header() {
   const closeMenu = () => setOpen(false);
 
   const logOut = async () => {
-    if (token) {
-      await logout({ token });
+    if (status !== "authenticated" || !token) {
+      console.warn("Logout skipped: no token");
+      return;
     }
+
+    await logout({ token });
   };
 
   return (
@@ -109,13 +123,38 @@ export default function Header() {
               >
                 Кабінет
               </Link>
-              <Button
-                variant="default"
-                onClick={() => logOut()}
-                className="rounded-full py-1 px-2.5 hidden md:flex items-center justify-center"
-              >
-                Вийти
-              </Button>
+
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button
+                    className="rounded-full py-1 px-2.5 hidden md:flex items-center justify-center"
+                    variant="default"
+                  >
+                    Вийти
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      Ви точно впевнені, що хочете вийти зі свого акаунту?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Ми будемо за Вами сумувати.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel
+                      className="rounded-full py-1 px-2.5 hidden md:flex items-center justify-center"
+                      variant="secondary"
+                    >
+                      Відмінити
+                    </AlertDialogCancel>
+                    <AlertDialogAction onClick={() => logOut()}>
+                      Вийти
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </ul>
           ) : (
             <ul className="flex flex-row gap-4">
