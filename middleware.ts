@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt"; // <--- Спеціальна функція для middleware
 
-const protectedRoutes = ["/profile", "/notes"];
+const protectedRoutes = ["/profile", "/orders", "/orders/create"];
 const publicRoutes = ["/login", "/sign-up"];
 
 export async function middleware(req: NextRequest) {
@@ -16,11 +16,11 @@ export async function middleware(req: NextRequest) {
   });
 
   const isProtectedRoute = protectedRoutes.some((route) =>
-    pathname.startsWith(route)
+    pathname.startsWith(route),
   );
 
   const isPublicRoute = publicRoutes.some((route) =>
-    pathname.startsWith(route)
+    pathname.startsWith(route),
   );
 
   // 1. Якщо юзер лізе на захищену сторінку без токена -> на логін
@@ -39,7 +39,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    "/((?!api|_next/static|_next/image|assets|favicon.ico|sw.js|site.webmanifest).*)",
-  ],
+  matcher: ["/profile/:path*", "/orders/:path*", "/login", "/sign-up"],
 };

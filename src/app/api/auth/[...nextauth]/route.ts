@@ -1,6 +1,7 @@
 import api from "@/lib/axios";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { refreshAccessToken } from "../../../../domains/auth";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -37,7 +38,7 @@ export const authOptions: NextAuthOptions = {
         } catch (error: any) {
           console.error(
             "🔥 [NextAuth] Backend Error:",
-            error.response?.data || error.message
+            error.response?.data || error.message,
           );
           return null;
         }
@@ -47,14 +48,24 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }: any) {
       if (user) {
-        token.accessToken = user.token;
-        token.id = user.id;
-        token.is_admin = user.is_admin;
+        return {
+          accessToken: user.token,
+          refreshToken: user.refresh_token,
+          id: user.id,
+          is_admin: user.is_admin,
+
+          accessTokenExpires: Date.now() + 120 * 60 * 1000,
+        };
       }
-      return token;
+      if (Date.now() < token.accessTokenExpires) {
+        return token;
+      }
+
+      return refreshAccessToken(token);
     },
     async session({ session, token }: any) {
       session.user.token = token.accessToken;
+
       session.user.id = token.id;
       session.user.is_admin = token.is_admin;
       return session;

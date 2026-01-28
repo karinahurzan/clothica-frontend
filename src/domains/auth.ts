@@ -8,6 +8,13 @@ interface SignUpProps {
   password: string;
 }
 
+interface Token {
+  accessToken: string;
+  refreshToken: string;
+  accessTokenExpires?: number;
+  error?: string;
+}
+
 export async function login({ email, password }: SignUpProps) {
   try {
     await api.post("/auth/login", {
@@ -106,7 +113,7 @@ export async function logout({ token }: LogOutProps) {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
+      },
     );
 
     toast.success("Успішний вихід", {
@@ -119,5 +126,33 @@ export async function logout({ token }: LogOutProps) {
       callbackUrl: "/login",
       redirect: true,
     });
+  }
+}
+
+export async function refreshAccessToken(token: Token) {
+  try {
+    const response = await api.post(
+      "/auth/refresh",
+      {
+        refresh_token: token.refreshToken,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token.accessToken}`,
+        },
+      },
+    );
+
+    const refreshedTokens = await response.data;
+
+    return {
+      ...token,
+      accessToken: refreshedTokens.token,
+      accessTokenExpires: Date.now() + 120 * 60 * 1000,
+      refreshToken: refreshedTokens.refresh_token ?? token.refreshToken,
+    };
+  } catch (error) {
+    console.error("RefreshAccessTokenError", error);
+    return { ...token, error: "RefreshAccessTokenError" };
   }
 }
