@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { v4 as uuidv4 } from "uuid";
 import { Good } from "@/domains/goods/type";
 import { useBasket } from "@/store/cartStore";
+import { toast } from "sonner";
 
 export interface HandleAddToCartProps {
   good?: Good;
@@ -28,6 +29,10 @@ export default function HandleAddToCart({ good }: HandleAddToCartProps) {
 
       addItem(good, Number(finalQuantity));
     }
+
+    toast.success("Вітаємо!", {
+      description: "Товар додано до кошика",
+    });
   };
 
   const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {

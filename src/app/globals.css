@@ -79,7 +79,7 @@
   --color-neutral-darkest-60: var(--opacity-neutral-darkest-60);
   --breakpoint-s: 600px;
   --breakpoint-xs: 560px;
-  --breakpoint-xxs: 370px;
+  --breakpoint-xxs: 500px;
 }
 
 /* Додайте це у ваш CSS файл */

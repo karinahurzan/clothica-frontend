@@ -95,17 +95,23 @@ export default function Header() {
           <NavigationMenuList>
             <NavigationMenuItem className={getLinkClassName("/")}>
               <NavigationMenuLink asChild>
-                <Link href="/">Головна</Link>
+                <Link onClick={() => setOpen(false)} href="/">
+                  Головна
+                </Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem className={getLinkClassName("/goods")}>
               <NavigationMenuLink asChild>
-                <Link href="/goods">Товари</Link>
+                <Link onClick={() => setOpen(false)} href="/goods">
+                  Товари
+                </Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem className={getLinkClassName("/categories")}>
               <NavigationMenuLink asChild>
-                <Link href="/categories">Категорії</Link>
+                <Link onClick={() => setOpen(false)} href="/categories">
+                  Категорії
+                </Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
           </NavigationMenuList>
@@ -197,17 +203,23 @@ export default function Header() {
             <NavigationMenuList className="flex-col pt-10 pb-16 gap-8">
               <NavigationMenuItem className={getLinkClassName("/")}>
                 <NavigationMenuLink asChild>
-                  <Link href="/">Головна</Link>
+                  <Link onClick={() => setOpen(false)} href="/">
+                    Головна
+                  </Link>
                 </NavigationMenuLink>
               </NavigationMenuItem>
               <NavigationMenuItem className={getLinkClassName("/goods")}>
                 <NavigationMenuLink asChild>
-                  <Link href="/goods">Товари</Link>
+                  <Link onClick={() => setOpen(false)} href="/goods">
+                    Товари
+                  </Link>
                 </NavigationMenuLink>
               </NavigationMenuItem>
               <NavigationMenuItem className={getLinkClassName("/categories")}>
                 <NavigationMenuLink asChild>
-                  <Link href="/categories">Категорії</Link>
+                  <Link onClick={() => setOpen(false)} href="/categories">
+                    Категорії
+                  </Link>
                 </NavigationMenuLink>
               </NavigationMenuItem>
             </NavigationMenuList>

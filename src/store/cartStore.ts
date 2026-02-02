@@ -1,5 +1,4 @@
 import { Good } from "@/domains/goods/type";
-import { Price } from "@/types";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -93,3 +92,5 @@ export const useBasket = create<BasketState>()(
     },
   ),
 );
+
+export const deliveryCost = 150;

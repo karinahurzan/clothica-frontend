@@ -15,10 +15,11 @@ import { v4 as uuidv4 } from "uuid";
 import { X } from "lucide-react";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import CartItem from "./CartItem";
-import { useBasket } from "@/store/cartStore";
+import { deliveryCost, useBasket } from "@/store/cartStore";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export function CartModal() {
   const { data: session, status } = useSession();
@@ -40,7 +41,7 @@ export function CartModal() {
     return () => clearInterval(id);
   }, []);
 
-  const deliveryCost = 150;
+  const router = useRouter();
 
   const creteAnOrder = async () => {
     if (status !== "authenticated" || !token) {
@@ -50,6 +51,8 @@ export function CartModal() {
       });
       return;
     }
+
+    router.push("/orders/create");
   };
 
   return (
@@ -105,10 +108,11 @@ export function CartModal() {
                 <DrawerClose asChild>
                   <Button variant="secondary">Продовжити покупки</Button>
                 </DrawerClose>
-
-                <Button onClick={creteAnOrder} variant="default">
-                  Оформити замовлення
-                </Button>
+                <DrawerClose asChild>
+                  <Button onClick={creteAnOrder} variant="default">
+                    Оформити замовлення
+                  </Button>
+                </DrawerClose>
               </div>
             </DrawerFooter>
           </>

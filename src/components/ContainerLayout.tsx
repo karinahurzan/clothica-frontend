@@ -14,7 +14,7 @@ export default function ContainerLayout({
       <div
         className={cn(
           "max-w-94 mx-0 my-auto py-4 md:max-w-3xl md:py-8 xl:py-12 xl:max-w-7xl",
-          className
+          className,
         )}
       >
         <Suspense

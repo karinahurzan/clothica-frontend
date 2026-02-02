@@ -7,6 +7,7 @@ import { Input } from "./ui/input";
 import { useState } from "react";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { Button } from "./ui/button";
+import Link from "next/link";
 
 export interface CartItemProps {
   product?: StoreGood;
@@ -62,7 +63,11 @@ export default function CartItem({ product }: CartItemProps) {
 
       <div className="flex flex-col xxs:flex-row w-full justify-between gap-2">
         <div>
-          <h4 className="text-lg font-semibold">{product?.good.name}</h4>
+          <h4 className="text-lg font-semibold">
+            <Link href={`/goods/${product?.good.id}`}>
+              {product?.good.name}
+            </Link>
+          </h4>
           <div className="flex flex-row items-center gap-2 text-black">
             <Star size={20} fill="black" strokeWidth={1} />
 
