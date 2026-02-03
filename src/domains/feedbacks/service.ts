@@ -1,25 +1,22 @@
-import api from "@/lib/axios";
+import { apiClient, apiGet } from "@/lib/apiClient";
 import { Feedback, FeedbackCreate } from "./type";
 import { handleAxiosError } from "@/lib/handleAxiosError";
 import { toast } from "sonner";
 
 export const getFeedbacks = async (productId: string): Promise<Feedback[]> => {
-  try {
-    const { data } = await api.get<Feedback[]>(`/feedbacks/${productId}`);
-    return data;
-  } catch (error) {
-    handleAxiosError(error, "Не вдалося завантажити відгуки");
-  }
+  return apiGet<Feedback[]>(
+    `/feedbacks/${productId}`,
+    undefined,
+    "Не вдалося завантажити відгуки",
+  );
 };
 
 export const getLatestFeedbacks = async (): Promise<Feedback[]> => {
-  try {
-    const { data } = await api.get<Feedback[]>("/feedbacks/latest");
-
-    return data;
-  } catch (error) {
-    handleAxiosError(error, "Не вдалося завантажити останні відгуки");
-  }
+  return apiGet<Feedback[]>(
+    "/feedbacks/latest",
+    undefined,
+    "Не вдалося завантажити останні відгуки",
+  );
 };
 
 export const createFeedback = async (
@@ -27,11 +24,15 @@ export const createFeedback = async (
   token: string,
 ): Promise<FeedbackCreate> => {
   try {
-    const { data } = await api.post<FeedbackCreate>("/feedbacks", feedback, {
-      headers: {
-        Authorization: `Bearer ${token}`,
+    const { data } = await apiClient.post<FeedbackCreate>(
+      "/feedbacks",
+      feedback,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       },
-    });
+    );
 
     toast.success("Успішна операція", {
       description: "Ви успішно створили новий відгук до цього товару",

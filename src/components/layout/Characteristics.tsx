@@ -1,5 +1,5 @@
 import Image from "next/image";
-import ContainerLayout from "./ContainerLayout";
+import ContainerLayout from "@/components/layout/ContainerLayout";
 
 export default function Characteristics() {
   const characteristics = [

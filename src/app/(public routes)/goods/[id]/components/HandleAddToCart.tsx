@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useEffect, useState, type ChangeEvent } from "react";
 import {
   Select,
   SelectContent,
@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { v4 as uuidv4 } from "uuid";
 import { Good } from "@/domains/goods/type";
 import { useBasket } from "@/store/cartStore";
 import { toast } from "sonner";
@@ -20,14 +19,24 @@ export interface HandleAddToCartProps {
 
 export default function HandleAddToCart({ good }: HandleAddToCartProps) {
   const [quantity, setQuantity] = useState<number | "">(1);
+  const [selectedSize, setSelectedSize] = useState<string | undefined>(
+    good?.size?.[0],
+  );
 
   const addItem = useBasket((state) => state.addGood);
 
   const handleAddToCart = () => {
+    if (good?.size?.length && !selectedSize) {
+      toast.error("Оберіть розмір", {
+        description: "Будь ласка, виберіть розмір перед додаванням у кошик",
+      });
+      return;
+    }
+
     if (good) {
       const finalQuantity = quantity === "" ? 1 : quantity;
 
-      addItem(good, Number(finalQuantity));
+      addItem(good, Number(finalQuantity), selectedSize);
     }
 
     toast.success("Вітаємо!", {
@@ -35,7 +44,7 @@ export default function HandleAddToCart({ good }: HandleAddToCartProps) {
     });
   };
 
-  const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleQuantityChange = (e: ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
 
     if (val === "") {
@@ -50,18 +59,24 @@ export default function HandleAddToCart({ good }: HandleAddToCartProps) {
     }
   };
 
+  useEffect(() => {
+    if (!selectedSize && good?.size?.length) {
+      setSelectedSize(good.size[0]);
+    }
+  }, [good?.size, selectedSize]);
+
   return (
     <div className="mb-8">
       <span className="block mb-2">Розмір</span>
 
-      <Select>
+      <Select value={selectedSize} onValueChange={setSelectedSize}>
         <SelectTrigger className="w-full">
           <SelectValue placeholder="Виберіть розмір" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
             {good?.size?.map((size) => (
-              <SelectItem key={uuidv4()} className="capitalize" value={size}>
+              <SelectItem key={size} className="capitalize" value={size}>
                 {size}
               </SelectItem>
             ))}
@@ -70,7 +85,12 @@ export default function HandleAddToCart({ good }: HandleAddToCartProps) {
       </Select>
 
       <div className="flex flex-row gap-4 mt-6 mb-4 max-h-9">
-        <Button onClick={handleAddToCart} variant="default" className="w-4/5">
+        <Button
+          onClick={handleAddToCart}
+          variant="default"
+          className="w-4/5"
+          disabled={!!good?.size?.length && !selectedSize}
+        >
           Додати в кошик
         </Button>
 

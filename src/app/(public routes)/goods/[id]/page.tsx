@@ -1,11 +1,10 @@
 "use client";
 
-import ContainerLayout from "@/components/ContainerLayout";
-import Placeholder from "@/components/Placeholder";
+import ContainerLayout from "@/components/layout/ContainerLayout";
+import Placeholder from "@/components/common/Placeholder";
 import { useGood } from "@/domains/goods";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import { v4 as uuidv4 } from "uuid";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -17,8 +16,8 @@ import {
 import { useCategory } from "@/domains/categories";
 import { Separator } from "@/components/ui/separator";
 import { formatReviews } from "@/utils/formatFeedback";
-import { RatingStars } from "@/components/RatingStars";
-import FeedbacksCarousel from "@/components/FeedbacksCarousel";
+import { RatingStars } from "@/components/common/RatingStars";
+import FeedbacksCarousel from "@/components/feedbacks/FeedbacksCarousel";
 import { Loader } from "lucide-react";
 import { useFeedbacks } from "@/domains/feedbacks";
 import HandleAddToCart from "./components/HandleAddToCart";
@@ -27,6 +26,7 @@ export default function Good() {
   const { id } = useParams() as { id: string };
 
   const { data: good, isLoading } = useGood(id);
+  const avgRating = Number(good?.feedbacks_average ?? 0);
 
   const { data: category } = useCategory(good?.category_id);
 
@@ -94,8 +94,8 @@ export default function Good() {
                   orientation="vertical"
                 />
                 <div className="flex flex-row items-center gap-2">
-                  <RatingStars rating={Number(good?.feedbacks_average)} />
-                  <span>({good?.feedbacks_average.toFixed(1)})</span>
+                  <RatingStars rating={avgRating} />
+                  <span>({avgRating.toFixed(1)})</span>
                   <span className="text-lg leading-none">•</span>
                   <span>{formatReviews(good?.feedbacks_count || 0)}</span>
                 </div>
@@ -116,7 +116,7 @@ export default function Good() {
 
                 <ul className="list-disc pl-6 space-y-2 text-neutral-darkest">
                   {good?.characteristics?.map((characteristic) => (
-                    <li key={uuidv4()}>{characteristic}</li>
+                    <li key={characteristic}>{characteristic}</li>
                   ))}
                 </ul>
               </div>

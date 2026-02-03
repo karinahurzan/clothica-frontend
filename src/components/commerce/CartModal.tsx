@@ -10,11 +10,10 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { v4 as uuidv4 } from "uuid";
 
 import { X } from "lucide-react";
 import { MdOutlineShoppingCart } from "react-icons/md";
-import CartItem from "./CartItem";
+import CartItem from "@/components/commerce/CartItem";
 import { deliveryCost, useBasket } from "@/store/cartStore";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
@@ -34,16 +33,12 @@ export function CartModal() {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    const id = setInterval(() => {
-      setIsMounted(true);
-    }, 0);
-
-    return () => clearInterval(id);
+    setIsMounted(true);
   }, []);
 
   const router = useRouter();
 
-  const creteAnOrder = async () => {
+  const createAnOrder = async () => {
     if (status !== "authenticated" || !token) {
       toast.error("Операція не дозволена", {
         description:
@@ -79,7 +74,7 @@ export function CartModal() {
           </DrawerTitle>
         </DrawerHeader>
         {items.length === 0 ? (
-          <div className="bg-deco-light py-6 px-4 md:px-8 xl:px-22 gap-4 rounded-2xl flex flex-col justify-between items-center w-full xl:max-w-190 self-start">
+          <div className="bg-deco-light mt-6 py-6 px-4 md:px-8 xl:px-22 gap-4 rounded-2xl flex flex-col justify-between items-center w-full xl:max-w-190 self-start">
             <p className="font-semibold text-lg text-center">
               Тут поки що порожньо...
             </p>
@@ -88,7 +83,9 @@ export function CartModal() {
           <>
             <ul className="no-scrollbar overflow-y-auto py-6 flex flex-col gap-4">
               {items.map((product) => (
-                <li key={uuidv4()}>{<CartItem product={product} />}</li>
+                <li key={product.key}>
+                  <CartItem product={product} />
+                </li>
               ))}
             </ul>
             <DrawerFooter className="border-t border-scheme-1-border">
@@ -109,7 +106,7 @@ export function CartModal() {
                   <Button variant="secondary">Продовжити покупки</Button>
                 </DrawerClose>
                 <DrawerClose asChild>
-                  <Button onClick={creteAnOrder} variant="default">
+                  <Button onClick={createAnOrder} variant="default">
                     Оформити замовлення
                   </Button>
                 </DrawerClose>

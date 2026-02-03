@@ -1,4 +1,4 @@
-import api from "@/lib/axios";
+import { apiClient } from "@/lib/apiClient";
 import { signIn, signOut } from "next-auth/react";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
@@ -17,7 +17,7 @@ interface Token {
 
 export async function login({ email, password }: SignUpProps) {
   try {
-    await api.post("/auth/login", {
+    await apiClient.post("/auth/login", {
       email,
       password,
     });
@@ -62,7 +62,7 @@ interface SignInProps {
 
 export async function register({ email, password, full_name }: SignInProps) {
   try {
-    await api.post("/auth/register", {
+    await apiClient.post("/auth/register", {
       email,
       password,
       full_name,
@@ -106,7 +106,7 @@ interface LogOutProps {
 
 export async function logout({ token }: LogOutProps) {
   try {
-    await api.post(
+    await apiClient.post(
       "/auth/logout",
       {},
       {
@@ -131,7 +131,7 @@ export async function logout({ token }: LogOutProps) {
 
 export async function refreshAccessToken(token: Token) {
   try {
-    const response = await api.post(
+    const response = await apiClient.post(
       "/auth/refresh",
       {
         refresh_token: token.refreshToken,

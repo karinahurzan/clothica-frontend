@@ -1,6 +1,5 @@
-import api from "@/lib/axios";
+import { apiGet } from "@/lib/apiClient";
 import { Good, GoodFilter, GoodsResponse } from "./type";
-import { handleAxiosError } from "@/lib/handleAxiosError";
 
 export async function getGoods({
   gender,
@@ -11,8 +10,9 @@ export async function getGoods({
   page,
   perPage,
 }: GoodFilter): Promise<GoodsResponse> {
-  try {
-    const { data } = await api.get<GoodsResponse>("/goods", {
+  return apiGet<GoodsResponse>(
+    "/goods",
+    {
       params: {
         gender,
         category_id,
@@ -22,19 +22,11 @@ export async function getGoods({
         skip: (page - 1) * perPage,
         limit: perPage,
       },
-    });
-
-    return data;
-  } catch (error) {
-    handleAxiosError(error, "Не вдалося завантажити список товарів");
-  }
+    },
+    "Не вдалося завантажити список товарів",
+  );
 }
 
 export async function getGoodById(id: string): Promise<Good> {
-  try {
-    const { data } = await api.get<Good>(`/goods/${id}`);
-    return data;
-  } catch (error) {
-    handleAxiosError(error, "Не вдалося завантажити товар");
-  }
+  return apiGet<Good>(`/goods/${id}`, undefined, "Не вдалося завантажити товар");
 }

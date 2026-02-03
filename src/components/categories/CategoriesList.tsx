@@ -1,13 +1,12 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import ContainerLayout from "./ContainerLayout";
-import CategoryCard from "./CategoryCard";
-import { Button } from "./ui/button";
+import ContainerLayout from "@/components/layout/ContainerLayout";
+import CategoryCard from "@/components/categories/CategoryCard";
+import { Button } from "@/components/ui/button";
 import { Loader } from "lucide-react";
-import { uuid } from "@tanstack/react-form";
 import { useCategories } from "@/domains/categories";
-import NotFoundCategoriesCard from "./NotFoundCategoriesCard";
+import NotFoundCategoriesCard from "@/components/common/NotFoundCategoriesCard";
 import { Category } from "@/domains/categories/type";
 
 const LOAD_MORE_AMOUNT = 3;
@@ -52,7 +51,7 @@ export default function CategoriesList() {
         <>
           <ul className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
             {visibleCategories.map((cat) => (
-              <li key={uuid()}>
+              <li key={cat.id}>
                 <CategoryCard category={cat} />
               </li>
             ))}

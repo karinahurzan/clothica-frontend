@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
 import { categoryImages } from "@/constants/categoryImages";
-import Placeholder from "./Placeholder";
+import Placeholder from "@/components/common/Placeholder";
 import { Category } from "@/domains/categories/type";
 
 interface Props {
@@ -15,7 +15,7 @@ export default function CategoryCard({ category }: Props) {
 
   return (
     <Link
-      href={`/goods?categoryId=${category.id}`}
+      href={`/goods?category_id=${category.id}`}
       className="flex flex-col gap-4 group"
     >
       <div className="relative hover:shadow-[0_4px_4px_0_rgba(0,0,0,0.25)] transition-all duration-200 overflow-hidden rounded-2xl bg-neutral-darkest-5">

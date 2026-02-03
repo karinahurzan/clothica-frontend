@@ -1,14 +1,14 @@
 "use client";
 
-import GoodCard from "./GoodCard";
-import { Button } from "./ui/button";
+import GoodCard from "@/components/commerce/GoodCard";
+import { Button } from "@/components/ui/button";
 import { Loader } from "lucide-react";
-import ContainerLayout from "./ContainerLayout";
-import FiltersPanel from "./FiltersPanel";
-import { MobileFilters } from "./MobileFilters";
+import ContainerLayout from "@/components/layout/ContainerLayout";
+import FiltersPanel from "@/components/filters/FiltersPanel";
+import { MobileFilters } from "@/components/filters/MobileFilters";
 import { usePathname, useRouter } from "next/navigation";
 import { Good, GoodsResponse } from "@/domains/goods/type";
-import NotFoundGoodsCard from "./NotFoundGoodsCard";
+import NotFoundGoodsCard from "@/components/common/NotFoundGoodsCard";
 import { useGoods } from "@/domains/goods";
 import { useCategories } from "@/domains/categories";
 
@@ -30,16 +30,19 @@ export default function GoodsListClient({
   const router = useRouter();
   const pathname = usePathname();
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
-    useGoods({ gender, category_id, size, minPrice, maxPrice });
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    isError,
+  } = useGoods({ gender, category_id, size, minPrice, maxPrice });
 
   const allGoods =
     data?.pages?.flatMap((page: GoodsResponse) => page.items) || [];
 
-  const totalCount =
-    data?.pages
-      ?.flatMap((page: GoodsResponse) => page.total_count)
-      .reduce((sum: number, count: number) => sum + count, 0) || 0;
+  const totalCount = data?.pages?.[0]?.total_count || 0;
 
   const maxAvailablePrice = data?.pages[0]?.max_available_price || 1000;
 
@@ -74,7 +77,7 @@ export default function GoodsListClient({
             <FiltersPanel maxAvailablePrice={maxAvailablePrice} />
           </div>
 
-          {totalCount === 0 ? (
+          {totalCount === 0 || isError ? (
             <div className="flex justify-center xl:px-28">
               <NotFoundGoodsCard isLoading={isLoading} onClick={clearAll} />
             </div>

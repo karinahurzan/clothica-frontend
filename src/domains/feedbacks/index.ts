@@ -10,10 +10,11 @@ export const useFeedbacks = ({ productId }: { productId?: string }) => {
   });
 };
 
-export const useLatestFeedbacks = () => {
+export const useLatestFeedbacks = (enabled = true) => {
   return useQuery({
     queryKey: ["latest_feedbacks"],
     queryFn: () => getLatestFeedbacks(),
+    enabled,
   });
 };
 

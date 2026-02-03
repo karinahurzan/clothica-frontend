@@ -1,8 +1,8 @@
-import CategoriesCarousel from "@/components/CategoriesCarousel";
-import Characteristics from "@/components/Characteristics";
-import FeedbacksCarousel from "@/components/FeedbacksCarousel";
-import GoodsCarousel from "@/components/GoodsCarousel";
-import Hero from "@/components/Hero";
+import CategoriesCarousel from "@/components/categories/CategoriesCarousel";
+import Characteristics from "@/components/layout/Characteristics";
+import FeedbacksCarousel from "@/components/feedbacks/FeedbacksCarousel";
+import GoodsCarousel from "@/components/commerce/GoodsCarousel";
+import Hero from "@/components/layout/Hero";
 
 export default function Home() {
   return (

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Button, buttonVariants } from "./ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { RxHamburgerMenu, RxCross1 } from "react-icons/rx";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
@@ -15,7 +15,7 @@ import {
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { logout } from "@/domains/auth";
-import { CartModal } from "./CartModal";
+import { CartModal } from "@/components/commerce/CartModal";
 import {
   AlertDialog,
   AlertDialogAction,

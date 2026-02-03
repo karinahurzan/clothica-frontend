@@ -6,11 +6,12 @@ export type StoreGood = {
   key: string;
   good: Good;
   quantity: number;
+  size?: string;
 };
 
 type BasketState = {
   goods: StoreGood[];
-  addGood: (good: Good, quantity?: number) => void;
+  addGood: (good: Good, quantity?: number, size?: string) => void;
   removeGood: (key: string) => void;
   decrementGood: (key: string) => void;
   updateGoodQuantity: (key: string, quantity: number) => void;
@@ -22,8 +23,8 @@ type BasketState = {
 export const useBasket = create<BasketState>()(
   persist(
     (set, get) => {
-      const buildGoodKey = (g: Good) =>
-        `${g.id}_${g.size || "nosize"}_${"nocolor"}`;
+      const buildGoodKey = (g: Good, size?: string) =>
+        `${g.id}_${size || "nosize"}_${"nocolor"}`;
 
       return {
         goods: [],
@@ -39,9 +40,9 @@ export const useBasket = create<BasketState>()(
           );
         },
 
-        addGood: (good, quantity = 1) =>
+        addGood: (good, quantity = 1, size) =>
           set((state) => {
-            const key = buildGoodKey(good);
+            const key = buildGoodKey(good, size);
             const existingIndex = state.goods.findIndex((g) => g.key === key);
 
             if (existingIndex !== -1) {
@@ -57,7 +58,7 @@ export const useBasket = create<BasketState>()(
                   key,
                   good,
                   quantity,
-                  price: good.price,
+                  size,
                 },
               ],
             };
@@ -74,9 +75,11 @@ export const useBasket = create<BasketState>()(
 
         updateGoodQuantity: (key, quantity) =>
           set((state) => ({
-            goods: state.goods.map((g) =>
-              g.key === key ? { ...g, quantity: Math.max(0, quantity) } : g,
-            ),
+            goods: state.goods
+              .map((g) =>
+                g.key === key ? { ...g, quantity: Math.max(0, quantity) } : g,
+              )
+              .filter((g) => g.quantity > 0),
           })),
 
         removeGood: (key) =>

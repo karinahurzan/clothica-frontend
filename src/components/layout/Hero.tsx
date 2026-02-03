@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
-import ContainerLayout from "./ContainerLayout";
-import { buttonVariants } from "./ui/button";
+import ContainerLayout from "@/components/layout/ContainerLayout";
+import { buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
 
 export default function Hero() {

@@ -1,16 +1,14 @@
 "use client";
 
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
-import { Checkbox } from "./ui/checkbox";
-import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
-import { Slider } from "./ui/slider";
-import { Label } from "./ui/label";
-import { Button } from "./ui/button";
-import { Separator } from "./ui/separator";
-import { uuid } from "@tanstack/react-form";
+import { useCallback } from "react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Slider } from "@/components/ui/slider";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import { Category } from "@/domains/categories/type";
-import { useGoods } from "@/domains/goods";
 import { useCategories } from "@/domains/categories";
 
 const SIZES = ["XXS", "XS", "S", "M", "L", "XL", "XXL"];
@@ -63,17 +61,17 @@ export default function FiltersPanel({ maxAvailablePrice }: FiltersPanelProps) {
   return (
     <aside className="w-full md:max-w-50 xl:max-w-70 space-y-8 pr-4">
       <div className="space-y-3">
-        <li
-          key={uuid()}
+        <button
+          type="button"
           className="cursor-pointer hover:text-neutral-darkest-20 transition"
           onClick={() => updateQuery("category_id", "")}
         >
           Усі
-        </li>
+        </button>
         <ul className="space-y-3">
           {categories?.map((cat: Category) => (
             <li
-              key={uuid()}
+              key={cat.id}
               className="cursor-pointer hover:text-neutral-darkest-20 transition"
               onClick={() => updateQuery("category_id", cat.id)}
             >

@@ -9,9 +9,9 @@ import {
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
-import { Separator } from "./ui/separator";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import { FaFacebook, FaInstagram, FaYoutube } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 
@@ -85,7 +85,9 @@ export default function Footer() {
         <Separator className="mt-10 mb-8" />
 
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 w-full">
-          <p className="text-center">© 2025 Clothica. Всі права захищені.</p>
+          <p className="text-center">
+            © {new Date().getFullYear()} Clothica. Всі права захищені.
+          </p>
 
           <ul className="flex flex-row justify-center items-center gap-3">
             <li>

@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import ContainerLayout from "./ContainerLayout";
-import CategoryCard from "./CategoryCard";
+import ContainerLayout from "@/components/layout/ContainerLayout";
+import GoodCard from "@/components/commerce/GoodCard";
 import { Loader } from "lucide-react";
 import {
   Carousel,
+  CarouselApi,
   CarouselContent,
   CarouselItem,
   CarouselNext,
@@ -13,46 +14,55 @@ import {
 } from "@/components/ui/carousel";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { buttonVariants } from "./ui/button";
-import { useCategories } from "@/domains/categories";
-import NotFoundCategoriesCard from "./NotFoundCategoriesCard";
-import { v4 as uuidv4 } from "uuid";
+import { buttonVariants } from "@/components/ui/button";
+import { CarouselDots } from "@/components/common/CarouselDots";
+import { GoodsResponse } from "@/domains/goods/type";
+import { useGoods } from "@/domains/goods";
+import NotFoundGoodsCard from "@/components/common/NotFoundGoodsCard";
 
-export default function CategoriesCarousel() {
-  const { data: categories, isLoading, isError } = useCategories();
+export default function GoodsCarousel() {
+  const [api, setApi] = useState<CarouselApi>();
+
+  const { data, isLoading, isError } = useGoods({});
+
+  const goods = data?.pages?.flatMap((page: GoodsResponse) => page.items) || [];
 
   return (
     <ContainerLayout className="flex flex-col justify-center items-center">
       <div className="flex flex-row items-end mb-10 md:justify-between w-full">
-        <h2 className="text-4xl xl:text-5xl">Популярні категорії</h2>
+        <h2 className="text-4xl xl:text-5xl">Популярні товари</h2>
         <Link
-          href={"/categories"}
+          href={"/goods"}
           className={cn(
             buttonVariants({ variant: "secondary" }),
             "py-1.5 px-3"
           )}
         >
-          Всі категорії
+          Всі товари
         </Link>
       </div>
+
       {isLoading ? (
         <div className="flex items-center justify-center">
           <Loader className="w-10 h-10 animate-spin" />
         </div>
       ) : (
         <>
-          {categories?.length === 0 || isError ? (
-            <NotFoundCategoriesCard />
+          {goods.length === 0 || isError ? (
+            <NotFoundGoodsCard />
           ) : (
-            <Carousel className="max-w-70 mx-0 my-auto md:max-w-2xl xl:max-w-7xl">
+            <Carousel
+              setApi={setApi}
+              className="max-w-70 mx-0 my-auto md:max-w-2xl xl:max-w-7xl"
+            >
               <CarouselContent>
-                {categories?.map((cat) => (
+                {goods.map((good) => (
                   <CarouselItem
-                    key={uuidv4()}
-                    className="md:basis-1/2 xl:basis-1/3"
+                    key={good.id}
+                    className="md:basis-3/9 xl:basis-1/4"
                   >
                     <div className="p-1">
-                      <CategoryCard category={cat} />
+                      <GoodCard good={good} />
                     </div>
                   </CarouselItem>
                 ))}
@@ -65,6 +75,8 @@ export default function CategoriesCarousel() {
                 <CarouselPrevious className="static translate-y-0" />
                 <CarouselNext className="static translate-y-0" />
               </div>
+
+              <CarouselDots api={api} itemsCount={goods.length} />
             </Carousel>
           )}
         </>

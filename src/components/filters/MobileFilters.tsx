@@ -9,7 +9,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import FiltersPanel from "./FiltersPanel";
+import FiltersPanel from "@/components/filters/FiltersPanel";
 import { usePathname, useRouter } from "next/navigation";
 
 interface MobileFiltersProps {

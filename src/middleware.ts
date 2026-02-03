@@ -25,14 +25,14 @@ export async function middleware(req: NextRequest) {
   const isPublicRoute =
     pathname.startsWith("/login") || pathname.startsWith("/sign-up");
 
-  if (isProtectedRoute && !token?.sub) {
+  if (isProtectedRoute && !token?.accessToken) {
     const url = new URL("/login", req.url);
     url.searchParams.set("callbackUrl", pathname);
     return NextResponse.redirect(url);
   }
 
-  if (isPublicRoute && token?.sub) {
-    return NextResponse.redirect(new URL("/profile", req.url));
+  if (isPublicRoute && token?.accessToken) {
+    return NextResponse.redirect(new URL("/", req.url));
   }
 
   return NextResponse.next();

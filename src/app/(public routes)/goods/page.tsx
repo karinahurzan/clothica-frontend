@@ -1,4 +1,4 @@
-import GoodsListClient from "@/components/GoodsListClient";
+import GoodsListClient from "@/components/commerce/GoodsListClient";
 
 interface Props {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;

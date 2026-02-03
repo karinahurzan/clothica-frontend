@@ -1,4 +1,4 @@
-import api from "@/lib/axios";
+import { apiClient } from "@/lib/apiClient";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { refreshAccessToken } from "../../../../domains/auth";
@@ -12,32 +12,20 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        console.log("🔑 [NextAuth] Inputs:", credentials);
-
         if (!credentials?.email || !credentials?.password) {
-          console.log("❌ [NextAuth] Missing credentials");
           return null;
         }
 
         try {
-          console.log("🚀 [NextAuth] Sending request to backend...");
-
-          const res = await api.post("/auth/login", {
+          const res = await apiClient.post("/auth/login", {
             email: credentials.email,
             password: credentials.password,
           });
 
-          const user = res.data;
-          console.log("✅ [NextAuth] Backend response:", user);
-
-          if (user) {
-            return user;
-          }
-
-          return null;
+          return res.data ?? null;
         } catch (error: any) {
           console.error(
-            "🔥 [NextAuth] Backend Error:",
+            "[NextAuth] Backend Error:",
             error.response?.data || error.message,
           );
           return null;

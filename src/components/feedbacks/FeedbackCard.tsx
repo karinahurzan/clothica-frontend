@@ -1,5 +1,5 @@
 import { Feedback } from "@/domains/feedbacks/type";
-import { RatingStars } from "./RatingStars";
+import { RatingStars } from "@/components/common/RatingStars";
 import Link from "next/link";
 
 interface FeedbackCardProps {

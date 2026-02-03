@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { Good } from "@/domains/goods/type";
-import Placeholder from "./Placeholder";
+import Placeholder from "@/components/common/Placeholder";
 import Image from "next/image";
 import { FaStar } from "react-icons/fa";
 import { MdOutlineComment } from "react-icons/md";
-import { buttonVariants } from "./ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 interface Props {
@@ -36,7 +36,7 @@ export default function GoodCard({ good }: Props) {
       </div>
 
       <div className="flex flex-row justify-start items-center gap-3">
-        {good.feedbacks_count || 0 > 0 ? (
+        {good.feedbacks_count > 0 ? (
           <div className="flex items-center gap-1">
             <FaStar />
             <span className="text-black">

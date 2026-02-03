@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import ContainerLayout from "./ContainerLayout";
-import { v4 as uuidv4 } from "uuid";
+import { useEffect, useState } from "react";
+import ContainerLayout from "@/components/layout/ContainerLayout";
 
 import { Loader } from "lucide-react";
 import {
@@ -13,9 +12,9 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import NotFoundFeedbacksCard from "./NotFoundFeedbacksCard";
-import FeedbackCard from "./FeedbackCard";
-import { CreateFeedbackModal } from "./CreateFeedbackModal";
+import NotFoundFeedbacksCard from "@/components/common/NotFoundFeedbacksCard";
+import FeedbackCard from "@/components/feedbacks/FeedbackCard";
+import { CreateFeedbackModal } from "@/components/feedbacks/CreateFeedbackModal";
 import { Feedback } from "@/domains/feedbacks/type";
 import { useLatestFeedbacks } from "@/domains/feedbacks";
 
@@ -35,7 +34,8 @@ export default function FeedbacksCarousel({
   const [api, setApi] = useState<CarouselApi>();
   const [canScroll, setCanScroll] = useState(false);
 
-  const { data: latestFeedbacks, isFetching, isError } = useLatestFeedbacks();
+  const { data: latestFeedbacks, isFetching, isError } =
+    useLatestFeedbacks(isMainPage);
 
   useEffect(() => {
     if (!api) return;
@@ -76,7 +76,7 @@ export default function FeedbacksCarousel({
               <CarouselContent>
                 {mainData?.map((feedback) => (
                   <CarouselItem
-                    key={uuidv4()}
+                    key={feedback.id}
                     className="md:basis-1/2 xl:basis-1/3"
                   >
                     <div className="p-1">

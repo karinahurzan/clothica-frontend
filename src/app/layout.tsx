@@ -3,9 +3,9 @@ import { Nunito_Sans } from "next/font/google";
 import "./globals.css";
 import "modern-normalize/modern-normalize.css";
 import { Toaster } from "@/components/ui/sonner";
-import { Providers } from "@/components/providers";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import { Providers } from "@/components/providers/Providers";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
 
 const nutinoSans = Nunito_Sans({
   variable: "--font-nutino-sans",

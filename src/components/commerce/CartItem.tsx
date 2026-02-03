@@ -1,12 +1,12 @@
-import Placeholder from "./Placeholder";
+import Placeholder from "@/components/common/Placeholder";
 import Image from "next/image";
 import { StoreGood, useBasket } from "@/store/cartStore";
 import { Star } from "lucide-react";
 import { MdOutlineComment } from "react-icons/md";
-import { Input } from "./ui/input";
-import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { useState, type ChangeEvent } from "react";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 export interface CartItemProps {
@@ -19,6 +19,8 @@ export default function CartItem({ product }: CartItemProps) {
   );
 
   const updateGoodQuantity = useBasket((state) => state.updateGoodQuantity);
+  const removeGood = useBasket((state) => state.removeGood);
+  const avgRating = product?.good?.feedbacks_average ?? 0;
 
   const handleUpdateCart = () => {
     if (product?.good) {
@@ -30,7 +32,7 @@ export default function CartItem({ product }: CartItemProps) {
     }
   };
 
-  const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleQuantityChange = (e: ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
 
     if (val === "") {
@@ -68,10 +70,15 @@ export default function CartItem({ product }: CartItemProps) {
               {product?.good.name}
             </Link>
           </h4>
+          {product?.size && (
+            <p className="text-sm text-neutral-darkest-60">
+              Розмір: {product.size}
+            </p>
+          )}
           <div className="flex flex-row items-center gap-2 text-black">
             <Star size={20} fill="black" strokeWidth={1} />
 
-            <span>{product?.good?.feedbacks_average.toFixed(1)}</span>
+            <span>{avgRating.toFixed(1)}</span>
             <MdOutlineComment />
             <span>{product?.good?.feedbacks_count || 0}</span>
           </div>
@@ -98,7 +105,12 @@ export default function CartItem({ product }: CartItemProps) {
               }}
             />
 
-            <Button className="p-0! gap-0! w-10 h-10" variant="secondary">
+            <Button
+              className="p-0! gap-0! w-10 h-10"
+              variant="secondary"
+              onClick={() => product?.key && removeGood(product.key)}
+              type="button"
+            >
               <RiDeleteBin6Line size={19} />
             </Button>
           </div>
