@@ -122,6 +122,7 @@ export default function Header() {
             <ul className="flex flex-row gap-4">
               <Link
                 href={"/profile"}
+                onClick={() => setOpen(false)}
                 className={cn(
                   buttonVariants({ variant: "secondary" }),
                   "rounded-full py-1 px-2.5 hidden md:flex items-center justify-center",
@@ -166,6 +167,7 @@ export default function Header() {
             <ul className="flex flex-row gap-4">
               <Link
                 href={"/login"}
+                onClick={() => setOpen(false)}
                 className={cn(
                   buttonVariants({ variant: "secondary" }),
                   "rounded-full py-1 px-2.5 hidden md:flex items-center justify-center",
@@ -175,6 +177,7 @@ export default function Header() {
               </Link>
               <Link
                 href={"/sign-up"}
+                onClick={() => setOpen(false)}
                 className={cn(
                   buttonVariants({ variant: "default" }),
                   "rounded-full py-1 px-2.5 hidden md:flex items-center justify-center",
@@ -230,6 +233,7 @@ export default function Header() {
               <>
                 <Link
                   href={"/profile"}
+                  onClick={() => setOpen(false)}
                   className={cn(
                     buttonVariants({ variant: "secondary" }),
                     "w-full rounded-full py-6 text-lg border-none shadow-none",
