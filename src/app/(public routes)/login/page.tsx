@@ -9,13 +9,12 @@ import {
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { login } from "@/domains/auth";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const signUpSchema = z.object({
@@ -27,7 +26,8 @@ type SignUpFormValues = z.infer<typeof signUpSchema>;
 
 export default function Login() {
   const [isMounted, setIsMounted] = useState(false);
-  const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") ?? "/";
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -46,15 +46,11 @@ export default function Login() {
       onChange: signUpSchema,
     },
     onSubmit: async ({ value }) => {
-      const res = await login({
+      await login({
         email: value.email,
         password: value.password,
+        callbackUrl,
       });
-
-      if (res !== undefined) {
-        router.refresh();
-        router.push("/");
-      }
     },
   });
 
@@ -64,7 +60,7 @@ export default function Login() {
     return cn(
       pathname === href
         ? "border-b-2 border-scheme-1-border"
-        : "border-b-2 border-transparent"
+        : "border-b-2 border-transparent",
     );
   };
 
@@ -76,7 +72,7 @@ export default function Login() {
             <NavigationMenuItem
               className={cn(
                 getLinkClassName("/sign-up"),
-                "flex justify-center items-center w-full"
+                "flex justify-center items-center w-full",
               )}
             >
               <NavigationMenuLink asChild>
@@ -87,7 +83,7 @@ export default function Login() {
             <NavigationMenuItem
               className={cn(
                 getLinkClassName("/login"),
-                "flex justify-center items-center w-full"
+                "flex justify-center items-center w-full",
               )}
             >
               <NavigationMenuLink asChild>

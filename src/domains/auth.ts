@@ -3,9 +3,10 @@ import { signIn, signOut } from "next-auth/react";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
 
-interface SignUpProps {
+interface LoginProps {
   email: string;
   password: string;
+  callbackUrl?: string;
 }
 
 interface Token {
@@ -15,7 +16,7 @@ interface Token {
   error?: string;
 }
 
-export async function login({ email, password }: SignUpProps) {
+export async function login({ email, password, callbackUrl }: LoginProps) {
   try {
     await apiClient.post("/auth/login", {
       email,
@@ -26,11 +27,11 @@ export async function login({ email, password }: SignUpProps) {
       description: "Виконується вхід...",
     });
 
-    await signIn("credentials", {
+    return signIn("credentials", {
       email,
       password,
       redirect: true,
-      callbackUrl: "/",
+      callbackUrl: callbackUrl ?? "/",
     });
   } catch (error) {
     let errorMessage = "Щось пішло не так. Спробуйте ще раз.";

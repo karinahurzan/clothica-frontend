@@ -11,6 +11,7 @@ import { useMyOrders } from "@/domains/orders";
 import { useCurrentUser, useUpdateCurrentUser } from "@/domains/profile";
 import { useForm } from "@tanstack/react-form";
 import { zodValidator } from "@tanstack/zod-form-adapter";
+import { Loader } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useEffect, useMemo } from "react";
 import { toast } from "sonner";
@@ -146,7 +147,7 @@ export default function Page() {
     form,
   ]);
 
-  const { data: myOrders } = useMyOrders(token);
+  const { data: myOrders, isLoading: isMyOrdersLoading } = useMyOrders(token);
 
   return (
     <ContainerLayout>
@@ -155,16 +156,22 @@ export default function Page() {
         <div className="min-w-full">
           <h2 className="text-xl mb-4 text-center">Мої замовлення</h2>
 
-          {myOrders?.length === 0 ? (
+          {isMyOrdersLoading ? (
+            <div className="flex items-center justify-center mt-10">
+              <Loader className="w-10 h-10 animate-spin" />
+            </div>
+          ) : myOrders?.length === 0 ? (
             <NoOrdersFoundCard />
           ) : (
-            <ul>
-              {myOrders?.map((order) => (
-                <li key={order.id}>
-                  <OrderItem order={order} />
-                </li>
-              ))}
-            </ul>
+            <div className="overflow-x-auto no-scrollbar">
+              <ul className="flex min-w-[32rem] flex-col gap-4 pr-2">
+                {myOrders?.map((order) => (
+                  <li key={order.id}>
+                    <OrderItem order={order} />
+                  </li>
+                ))}
+              </ul>
+            </div>
           )}
         </div>
         <div>

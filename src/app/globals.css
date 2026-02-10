@@ -82,7 +82,6 @@
   --breakpoint-xxs: 500px;
 }
 
-/* Додайте це у ваш CSS файл */
 @layer utilities {
   .no-scrollbar::-webkit-scrollbar {
     display: none;
