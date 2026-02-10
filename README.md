@@ -1,36 +1,83 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Clothica Frontend
 
-## Getting Started
+Clothica Frontend is a Next.js 16 application that delivers the customer-facing experience for an online fashion marketplace. It exposes public catalog pages, category exploration, product detail views, and authenticated areas for profile management and order history. The app integrates with a backend API for catalog data, checkout, and user accounts, and uses modern UI patterns (carousels, drawers, modals) to provide a polished shopping journey.
 
-First, run the development server:
+### Key Features
+
+- Responsive storefront with category and product discovery flows
+- Authenticated profile and order management backed by NextAuth
+- Feedback collection and ratings surfaced through reusable UI components
+- Client-side state powered by React Query and Zustand for fast navigation
+- Tailwind CSS 4 utility-first styling with custom component primitives
+
+### Tech Stack
+
+- Framework: Next.js 16 (App Router)
+- Language: TypeScript
+- Styling: Tailwind CSS 4, modern-normalize
+- State & Forms: TanStack Query, Zustand, React Hook Form, Zod validation
+- UI: Radix UI primitives, Embla carousel, Sonner notifications
+- Auth: NextAuth with middleware-protected routes
+
+### Prerequisites
+
+- Node.js 18.18+ or 20+
+- npm 9+ (or an alternative package manager such as pnpm, yarn, or bun)
+
+### Environment Variables
+
+Create a `.env.local` file at the project root with the following variables:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+NEXT_PUBLIC_API_URL="https://your-api.example.com"
+NEXTAUTH_SECRET="replace-with-secure-random-string"
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+> `NEXT_PUBLIC_API_URL` must point to the backend REST API that serves catalog, orders, and profile data. `NEXTAUTH_SECRET` secures session tokens and should only be shared between the frontend and authentication backend.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+If you deploy to another environment, mirror these values in the corresponding `.env` file for that target.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Local Development
 
-## Learn More
+Install dependencies and run the dev server:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm install
+npm run dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The app will be available at http://localhost:3000. Hot-module replacement is enabled for rapid iteration.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Production Build
 
-## Deploy on Vercel
+Create an optimized bundle and serve it locally to validate production behavior:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+npm run build
+npm run start
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Linting
+
+Run static analysis to enforce coding standards and catch common issues:
+
+```bash
+npm run lint
+```
+
+### Project Structure
+
+- `src/app` – App Router entry points, layouts, and route groups for public and private views
+- `src/components` – Presentation layer components, organized by domain (categories, commerce, feedbacks, layout, shared UI)
+- `src/domains` – API-facing domain modules encapsulating service calls and typed contracts
+- `src/lib` – Axios client configuration, shared utilities, error handling helpers
+- `src/store` – Zustand store(s) for client-side state management
+- `src/utils` – Formatting helpers for dates and feedback data
+
+### Testing Checklist
+
+- Verify public storefront pages render with mock data
+- Confirm authentication flows (login, sign-up) succeed against your backend
+- Ensure protected routes redirect unauthenticated users to login
+- Place test orders and inspect them in the profile section
+- Review lint and build output before merging changes
