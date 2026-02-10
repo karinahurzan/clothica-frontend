@@ -15,7 +15,6 @@ import { X } from "lucide-react";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import CartItem from "@/components/commerce/CartItem";
 import { deliveryCost, useBasket } from "@/store/cartStore";
-import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -27,12 +26,6 @@ export function CartModal() {
   const items = useBasket((state) => state.goods);
   const totalCount = useBasket((state) => state.getTotalCount());
   const totalPrice = useBasket((state) => state.getTotalPrice());
-
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   const router = useRouter();
 
@@ -54,7 +47,7 @@ export function CartModal() {
         <Button className="relative p-0 gap-0 hover:bg-neutral-darkest active:bg-neutral-darkest focus:bg-neutral-darkest h-9 w-9 rounded-full border-none bg-neutral-darkest text-white flex justify-center items-center cursor-pointer">
           <MdOutlineShoppingCart className="rounded-25 h-8 w-8 flex items-center justify-center bg-neutral-darkest-5" />
 
-          {isMounted && totalCount > 0 && (
+          {totalCount > 0 && (
             <span className="absolute -top-2 -right-2 flex items-center justify-center w-5 h-5 rounded-full bg-red text-xs font-semibold text-white">
               {totalCount}
             </span>

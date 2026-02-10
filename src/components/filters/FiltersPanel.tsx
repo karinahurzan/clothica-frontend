@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Slider } from "@/components/ui/slider";
@@ -42,21 +42,6 @@ export default function FiltersPanel({ maxAvailablePrice }: FiltersPanelProps) {
 
     return [min, max];
   }, [searchParams, maxAvailablePrice]);
-
-  const [sliderValue, setSliderValue] =
-    useState<[number, number]>(computedSliderRange);
-
-  useEffect(() => {
-    setSliderValue((prev) => {
-      if (
-        prev[0] === computedSliderRange[0] &&
-        prev[1] === computedSliderRange[1]
-      ) {
-        return prev;
-      }
-      return computedSliderRange;
-    });
-  }, [computedSliderRange]);
 
   const updateQuery = useCallback(
     (name: string, value: string | null) => {
@@ -172,11 +157,11 @@ export default function FiltersPanel({ maxAvailablePrice }: FiltersPanelProps) {
           </Button>
         </div>
         <Slider
-          value={sliderValue}
+          key={`${computedSliderRange[0]}-${computedSliderRange[1]}`}
+          defaultValue={computedSliderRange}
           min={0}
           max={maxAvailablePrice}
           step={10}
-          onValueChange={setSliderValue}
           onValueCommit={handlePriceChange}
           className="mt-6"
         />

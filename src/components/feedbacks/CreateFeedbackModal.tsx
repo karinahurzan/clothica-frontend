@@ -3,7 +3,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Loader, Star } from "lucide-react";
 
 import {
@@ -32,12 +31,12 @@ type FeedbackFormValues = z.infer<typeof feedbackSchema>;
 
 export function CreateFeedbackModal({ productId }: { productId: string }) {
   const [open, setOpen] = useState(false);
+  const [rating, setRating] = useState(0);
 
   const {
     register,
     handleSubmit,
     setValue,
-    watch,
     reset,
     formState: { errors },
   } = useForm<FeedbackFormValues>({
@@ -48,9 +47,20 @@ export function CreateFeedbackModal({ productId }: { productId: string }) {
   const session = useSession();
   const { token } = session?.data?.user || {};
 
-  const rating = watch("rate");
-
   const { mutate, isPending } = useCreateFeedback();
+
+  const handleOpenChange = (nextOpen: boolean) => {
+    setOpen(nextOpen);
+    if (!nextOpen) {
+      reset();
+      setRating(0);
+    }
+  };
+
+  const handleSelectRate = (star: number) => {
+    setValue("rate", star);
+    setRating(star);
+  };
 
   const onSubmit = (data: FeedbackFormValues) => {
     if (!token) {
@@ -67,13 +77,14 @@ export function CreateFeedbackModal({ productId }: { productId: string }) {
         onSuccess: () => {
           setOpen(false);
           reset();
+          setRating(0);
         },
       },
     );
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <Button
           className="whitespace-normal h-full text-center max-w-30 xxs:max-w-full"
@@ -124,7 +135,7 @@ export function CreateFeedbackModal({ productId }: { productId: string }) {
                   "w-6 h-6 cursor-pointer transition-colors",
                   star <= rating ? "fill-black text-black" : "text-gray-400",
                 )}
-                onClick={() => setValue("rate", star)}
+                onClick={() => handleSelectRate(star)}
               />
             ))}
           </div>

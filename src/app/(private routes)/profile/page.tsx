@@ -6,11 +6,9 @@ import ContainerLayout from "@/components/layout/ContainerLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { useMyOrders } from "@/domains/orders";
 import { useCurrentUser, useUpdateCurrentUser } from "@/domains/profile";
 import { useForm } from "@tanstack/react-form";
-import { zodValidator } from "@tanstack/zod-form-adapter";
 import { Loader } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useEffect, useMemo } from "react";
@@ -92,7 +90,6 @@ export default function Page() {
       cityAddress: "",
       novaPostNumber: "",
     },
-    validatorAdapter: zodValidator(),
     validators: { onBlur: profileSchema, onSubmit: profileSchema },
     onSubmit: async ({ value }) => {
       if (!token) {

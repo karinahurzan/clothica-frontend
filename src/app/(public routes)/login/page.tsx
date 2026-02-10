@@ -2,6 +2,7 @@
 
 import { z } from "zod";
 import { useForm } from "@tanstack/react-form";
+import { Suspense } from "react";
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -15,7 +16,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { login } from "@/domains/auth";
-import { useEffect, useState } from "react";
 
 const signUpSchema = z.object({
   email: z.string().email("Введіть коректну електронну адресу"),
@@ -24,18 +24,9 @@ const signUpSchema = z.object({
 
 type SignUpFormValues = z.infer<typeof signUpSchema>;
 
-export default function Login() {
-  const [isMounted, setIsMounted] = useState(false);
+function LoginContent() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") ?? "/";
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsMounted(true);
-    }, 0);
-
-    return () => clearTimeout(timer);
-  }, []);
 
   const form = useForm({
     defaultValues: {
@@ -167,5 +158,13 @@ export default function Login() {
         </form>
       </div>
     </section>
+  );
+}
+
+export default function Login() {
+  return (
+    <Suspense fallback={null}>
+      <LoginContent />
+    </Suspense>
   );
 }

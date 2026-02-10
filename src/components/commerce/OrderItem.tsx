@@ -30,6 +30,7 @@ export default function OrderItem({ order }: OrderItemProps) {
       await navigator.clipboard.writeText(order.id);
       toast.success("Номер замовлення скопійовано");
     } catch (error) {
+      console.error("Copy order id failed", error);
       toast.error("Не вдалося скопіювати номер замовлення");
     }
   };

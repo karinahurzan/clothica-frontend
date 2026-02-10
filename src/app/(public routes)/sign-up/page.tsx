@@ -15,7 +15,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { register } from "@/domains/auth";
-import { useEffect, useState } from "react";
 
 const signUpSchema = z.object({
   name: z.string().min(2, "Ім'я має містити мінімум 2 символи"),
@@ -26,16 +25,7 @@ const signUpSchema = z.object({
 type SignUpFormValues = z.infer<typeof signUpSchema>;
 
 export default function SignUp() {
-  const [isMounted, setIsMounted] = useState(false);
   const router = useRouter();
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsMounted(true);
-    }, 0);
-
-    return () => clearTimeout(timer);
-  }, []);
 
   const form = useForm({
     defaultValues: {
@@ -66,7 +56,7 @@ export default function SignUp() {
     return cn(
       pathname === href
         ? "border-b-2 border-scheme-1-border"
-        : "border-b-2 border-transparent"
+        : "border-b-2 border-transparent",
     );
   };
 
@@ -78,7 +68,7 @@ export default function SignUp() {
             <NavigationMenuItem
               className={cn(
                 getLinkClassName("/sign-up"),
-                "flex justify-center items-center w-full"
+                "flex justify-center items-center w-full",
               )}
             >
               <NavigationMenuLink asChild>
@@ -89,7 +79,7 @@ export default function SignUp() {
             <NavigationMenuItem
               className={cn(
                 getLinkClassName("/login"),
-                "flex justify-center items-center w-full"
+                "flex justify-center items-center w-full",
               )}
             >
               <NavigationMenuLink asChild>

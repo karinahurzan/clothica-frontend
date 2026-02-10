@@ -9,7 +9,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { useCurrentUser, useUpdateCurrentUser } from "@/domains/profile";
 import { deliveryCost, useBasket } from "@/store/cartStore";
 import { useForm } from "@tanstack/react-form";
-import { zodValidator } from "@tanstack/zod-form-adapter";
 import { usePlaceOrder } from "@/domains/orders";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
@@ -99,8 +98,8 @@ export default function Page() {
       novaPostNumber: "",
       comment: "",
     },
-    validatorAdapter: zodValidator(),
-    validators: { onBlur: orderSchema, onSubmit: orderSchema },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    validators: { onBlur: orderSchema as any, onSubmit: orderSchema as any },
     onSubmit: async ({ value }) => {
       if (isCartEmpty) {
         toast.error("Кошик порожній", {

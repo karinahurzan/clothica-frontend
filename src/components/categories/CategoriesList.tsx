@@ -11,10 +11,11 @@ import { Category } from "@/domains/categories/type";
 
 const LOAD_MORE_AMOUNT = 4;
 
+const getBaseVisibleCount = () =>
+  typeof window !== "undefined" && window.innerWidth >= 1280 ? 6 : 4;
+
 export default function CategoriesList() {
-  const [visibleCount, setVisibleCount] = useState(
-    window.innerWidth >= 1280 ? 6 : 4,
-  );
+  const [visibleCount, setVisibleCount] = useState(() => getBaseVisibleCount());
   const [categories, setCategories] = useState<Category[]>([]);
 
   const { data, isLoading, isError } = useCategories();
@@ -36,7 +37,7 @@ export default function CategoriesList() {
 
   const toggleShow = () => {
     if (isExpanded) {
-      setVisibleCount(window.innerWidth >= 1280 ? 6 : 4);
+      setVisibleCount(getBaseVisibleCount());
     } else {
       const next = visibleCount + LOAD_MORE_AMOUNT;
       setVisibleCount(Math.min(next, categories.length));
